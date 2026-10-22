@@ -1,9 +1,8 @@
 fileFormatVersion: 2
-guid: 4c68b8122cb200f49b20cdba58332405
-labels:
-- gpsr
-DefaultImporter:
+guid: fcd97e6d8ad15d44abfb60ad8c701a78
+NativeFormatImporter:
   externalObjects: {}
+  mainObjectFileID: 11400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
