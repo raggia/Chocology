@@ -1,7 +1,6 @@
 ﻿using Doozy.Engine.UI;
 using Doozy.Engine.UI.Animation;
 using Doozy.Engine.UI.Base;
-using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,13 +9,13 @@ using UnityEngine;
 public class BBUIView : UIComponentBase<BBUIView>
 {
     /// <summary> Behavior when this UIView gets shown (becomes visible on screen) </summary>
-    [ToggleGroup("UseShowBehavior")] [SerializeField] private bool UseShowBehavior;
-    [ToggleGroup("UseShowBehavior")] public BBUIViewBehavior ShowBehavior = new BBUIViewBehavior();
+    [SerializeField] private bool UseShowBehavior;
+    public BBUIViewBehavior ShowBehavior = new BBUIViewBehavior();
 
 
     /// <summary> Behavior when this UIView gets hidden (goes off screen) </summary>
-    [ToggleGroup("UseHideBehavior")] [SerializeField] private bool UseHideBehavior;
-    [ToggleGroup("UseHideBehavior")] public BBUIViewBehavior HideBehavior = new BBUIViewBehavior();
+    [SerializeField] private bool UseHideBehavior;
+    public BBUIViewBehavior HideBehavior = new BBUIViewBehavior();
     
 
     /// <summary> Returns TRUE if this UIView is NOT visible (is NOT in view) </summary>

@@ -5,7 +5,6 @@
  * Support : dotmobstudio@gmail.com
  */
 
-using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,17 +17,17 @@ public class GameLevelManager : MonoBehaviour
 {
 
     public static GameLevelManager instance;
-    [Title("CONFIG LEVEL")]
+    // ---- CONFIG LEVEL ----
     public ConfigLevelGame configLevelGame;
 
 
 
-    [InfoBox("Các item hiện trên map")]
+    [Tooltip("Các item hiện trên map")]
     public List<ItemData> listItemDataOnMaps = new List<ItemData>();
 
 
 
-    [Title("REFERENCE")]
+    // ---- REFERENCE ----
     public ItemTile itemTilePrefab;
     [Header("TileMaps")]
     public GameObject tileMapGroup;
@@ -566,7 +565,6 @@ public class GameLevelManager : MonoBehaviour
     #region SUGGEST
     [Header("SUGGEST")]
     public List<ItemTile> listSuggest_ItemTiles = new List<ItemTile>();
-    [ShowInInspector]
     public Dictionary<Config.ITEM_TYPE, List<ItemTile>> dicItemTiles = new Dictionary<Config.ITEM_TYPE, List<ItemTile>>();
 
     //Bộ dic này là cả sáng cả mờ

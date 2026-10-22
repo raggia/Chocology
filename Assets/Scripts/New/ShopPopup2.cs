@@ -8,7 +8,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Sirenix.OdinInspector;
 using UnityEngine.UI;
 
 public class ShopPopup2 : MonoBehaviour
@@ -55,7 +54,7 @@ public class ShopPopup2 : MonoBehaviour
 
     }
 
-    [Button("OpenPopup")]
+    [ContextMenu("OpenPopup")]
     public void OpenPopup()
     {
         lockGroup.SetActive(true);

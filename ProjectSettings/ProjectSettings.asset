@@ -847,24 +847,26 @@ PlayerSettings:
   webEnableSubmoduleStrippingCompatibility: 0
   webProgressiveAssetLoading: 0
   scriptingDefineSymbols:
-    Android: ODIN_INSPECTOR;dUI_MANAGER;GLEY_ADMOB;GLEY_PATCH_ADMOB;USE_IRONSOURCE_BSPLABS;CLOUDONCE_GOOGLE
+    Android: dUI_MANAGER;GLEY_ADMOB;GLEY_PATCH_ADMOB;USE_IRONSOURCE_BSPLABS;CLOUDONCE_GOOGLE
     CloudRendering: dUI_MANAGER
     EmbeddedLinux: dUI_MANAGER
     GameCoreScarlett: dUI_MANAGER
     GameCoreXboxOne: dUI_MANAGER
+    Kepler: dUI_MANAGER
     LinuxHeadlessSimulation: dUI_MANAGER
     Lumin: dUI_MANAGER
     Nintendo Switch: dUI_MANAGER
-    PS4: dUI_MANAGER;ODIN_INSPECTOR
+    Nintendo Switch 2: dUI_MANAGER
+    PS4: dUI_MANAGER
     PS5: dUI_MANAGER
     QNX: dUI_MANAGER
     Stadia: dUI_MANAGER
-    Standalone: dUI_MANAGER;ODIN_INSPECTOR
+    Standalone: dUI_MANAGER
     VisionOS: dUI_MANAGER
     WebGL: dUI_MANAGER
     Windows Store Apps: dUI_MANAGER
     XboxOne: dUI_MANAGER
-    iPhone: dUI_MANAGER;ODIN_INSPECTOR;USE_IRONSOURCE_BSPLABS
+    iPhone: dUI_MANAGER;USE_IRONSOURCE_BSPLABS
     tvOS: dUI_MANAGER
   additionalCompilerArguments: {}
   platformArchitecture: {}

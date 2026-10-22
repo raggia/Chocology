@@ -10,7 +10,6 @@ using Doozy.Engine;
 using Doozy.Engine.UI.Input;
 using Doozy.Engine.Settings;
 using System;
-using Sirenix.OdinInspector;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Button))]
@@ -25,14 +24,14 @@ public class BBUIButton : UIComponentBase<BBUIButton>, IPointerEnterHandler, IPo
     public bool BlockAllButtonClicks = true;
     //public AIState NextState = AIState.None;
     //[ConditionalField("NextState", AIState.Idle)] public float IdleTime = 5;
-    [ToggleGroup("UseOnPointerClick")] [SerializeField] private bool UseOnPointerClick;
-    [ToggleGroup("UseOnPointerClick")] public BBUIButtonBehavior OnPointerClick_BBUIButtonBehavior;
-    [ToggleGroup("UseOnPointerClick")] public UnityEvent OnPointerClickCallBack_Start;
-    [ToggleGroup("UseOnPointerClick")] public UnityEvent OnPointerClickCallBack_Completed;
-    [ToggleGroup("UseOnPointerDown")] [SerializeField] private bool UseOnPointerDown;
-    [ToggleGroup("UseOnPointerDown")] public UnityEvent OnPointerDownCallBack;
-    [ToggleGroup("UseOnPointerUp")] [SerializeField] private bool UseOnPointerUp;
-    [ToggleGroup("UseOnPointerUp")] public UnityEvent OnPointerUpCallBack;
+    [SerializeField] private bool UseOnPointerClick;
+    public BBUIButtonBehavior OnPointerClick_BBUIButtonBehavior;
+    public UnityEvent OnPointerClickCallBack_Start;
+    public UnityEvent OnPointerClickCallBack_Completed;
+    [SerializeField] private bool UseOnPointerDown;
+    public UnityEvent OnPointerDownCallBack;
+    [SerializeField] private bool UseOnPointerUp;
+    public UnityEvent OnPointerUpCallBack;
     public override void Start()
     {
         base.Start();

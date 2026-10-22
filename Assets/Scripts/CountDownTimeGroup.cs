@@ -1,5 +1,4 @@
-﻿using Sirenix.OdinInspector;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +6,13 @@ using UnityEngine.UI;
 public class CountDownTimeGroup : MonoBehaviour
 {
     //Đếm ngược thời gian
-    [ToggleGroup("UseText")] [SerializeField] private bool UseText;
-    [ToggleGroup("UseText")] [SerializeField] private bool isRound;
-    [ToggleGroup("UseText")] [SerializeField] private bool isUse_S;
-    [ToggleGroup("UseText")] [SerializeField] private Text timeTxt;
+    [SerializeField] private bool UseText;
+    [SerializeField] private bool isRound;
+    [SerializeField] private bool isUse_S;
+    [SerializeField] private Text timeTxt;
 
-    [ToggleGroup("UseImage")] [SerializeField] private bool UseImage;
-    [ToggleGroup("UseImage")] [SerializeField] private Image timeImg;
+    [SerializeField] private bool UseImage;
+    [SerializeField] private Image timeImg;
 
     private float initTime;
     private float countTime;

@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Sirenix.OdinInspector;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager instance;
@@ -358,7 +357,7 @@ public class MenuManager : MonoBehaviour
 
     #endregion
 
-    [Button("Reset SCENE")]
+    [ContextMenu("Reset SCENE")]
     public void TouchResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
