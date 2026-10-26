@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class FreeItemPopup : MonoBehaviour
@@ -81,7 +80,6 @@ public class FreeItemPopup : MonoBehaviour
 //                //Buy
 //                btnWatchAds.Interactable = false;
 //                WatchAds_Finished();
-////                FirebaseManager.instance.LogShowReward("FreeItem");
 //            }
 //            else
 //            {

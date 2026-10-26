@@ -847,7 +847,7 @@ PlayerSettings:
   webEnableSubmoduleStrippingCompatibility: 0
   webProgressiveAssetLoading: 0
   scriptingDefineSymbols:
-    Android: dUI_MANAGER;GLEY_ADMOB;GLEY_PATCH_ADMOB;USE_IRONSOURCE_BSPLABS;CLOUDONCE_GOOGLE
+    Android: dUI_MANAGER;USE_IRONSOURCE_BSPLABS;CLOUDONCE_GOOGLE;LEVELPLAY_DEPENDENCIES_INSTALLED
     CloudRendering: dUI_MANAGER
     EmbeddedLinux: dUI_MANAGER
     GameCoreScarlett: dUI_MANAGER

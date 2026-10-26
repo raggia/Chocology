@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using com.adjust.sdk;
+using AdjustSdk;
 
 public class AdjustManager : Singleton<AdjustManager>
 {
@@ -22,39 +22,6 @@ public class AdjustManager : Singleton<AdjustManager>
     [SerializeField] private string IAPPurchasedSuccessToken;
     [SerializeField] private string IAPPurchasedFailedToken;
 
-    #region FIREBASE METHOD
-    // Firebase SDK is not in the repo (/Assets/Firebase is git-ignored), so the FCM hooks below are compiled out.
-    // To re-enable: import the Firebase Messaging SDK and add the scripting define FIREBASE_MESSAGING.
-    public void Start() => Initialize();
-
-    void Initialize()
-    {
-#if FIREBASE_MESSAGING
-        Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
-        Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
-#endif
-
-        if (!string.IsNullOrEmpty(GlobalVar.GetToknFCM()))
-        {
-            Adjust.setDeviceToken(GlobalVar.GetToknFCM());
-        }
-    }
-
-#if FIREBASE_MESSAGING
-    public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
-    {
-        UnityEngine.Debug.Log("Received Registration Token: " + token.Token);
-        GlobalVar.SaveTokenFCM(token.Token);
-
-        Adjust.setDeviceToken(GlobalVar.GetToknFCM());
-    }
-
-    public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
-    {
-        UnityEngine.Debug.Log("Received a new message from: " + e.Message.From);
-    }
-#endif
-    #endregion
 
     public void PlayGame() => DoEvent(PlayGameToken);
     public void BackToHome() => DoEvent(BackToHomeToken);
@@ -75,7 +42,7 @@ public class AdjustManager : Singleton<AdjustManager>
     void DoEvent(string _token)
     {
         AdjustEvent adjust = new(_token);
-        Adjust.trackEvent(adjust);
+        Adjust.TrackEvent(adjust);
     }
 
 }

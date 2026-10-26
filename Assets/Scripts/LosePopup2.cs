@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class LosePopup2 : MonoBehaviour
@@ -69,7 +68,6 @@ public class LosePopup2 : MonoBehaviour
         if (Config.interstitialAd_countLose == 2)
         {
             Config.interstitialAd_countLose = 0;
-            API.ShowInterstitial();
             BspLabsAdsMobile.Instance.ShowInterstitial();
             
         }
@@ -196,7 +194,6 @@ public class LosePopup2 : MonoBehaviour
 
         if (BspLabsAdsMobile.Instance.IsRewardVideoAvailable())
         {
-            //API.ShowRewardedVideo(CompleteMethod);
             BspLabsAdsMobile.Instance.ShowRewardedVideo(CompleteMethod);
             AdjustManager.instance.ContinueWithAds();
         }

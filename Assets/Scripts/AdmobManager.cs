@@ -15,7 +15,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
 //using GoogleMobileAds.Api;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class AdmobManager : MonoBehaviour
@@ -38,24 +37,8 @@ public class AdmobManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(this);
     }
-    // Start is called before the first frame update
     void Start()
     {
-
-
-        //API.Initialize();
         BspLabsAdsMobile.Instance.Initialize();
-
-      //  Debug.Log("GDPR status check :" + API.GDPRConsentWasSet());
-        //if (!API.GDPRConsentWasSet())
-        //{
-        //    API.ShowBuiltInConsentPopup(PopupClosed);
-        //}
-
-    }
-
-    private void PopupClosed()
-    {
-        //Resume game
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class WinPopup : MonoBehaviour
@@ -108,7 +107,6 @@ public class WinPopup : MonoBehaviour
 //                    lockGroup.gameObject.SetActive(false);
 //                    btnReward.Interactable = false;
 //                    xReward_Finished();
-////                    FirebaseManager.instance.LogShowReward("x4Reward");
 //                }
 //                else
 //                {
@@ -210,7 +208,6 @@ public class WinPopup : MonoBehaviour
         //    SetEnableNativeAd();
         //    logo.gameObject.SetActive(false);
         //    nativeAdPanel.SetInitNativeAd(AdmobManager.instance.nativeAd);
-        //    FirebaseManager.instance.LogShowNative(Config.currLevel);
         //}
         //else
         //{

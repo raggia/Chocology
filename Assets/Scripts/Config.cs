@@ -10,7 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Gley.MobileAds;
+using BsplabsMobileAds;
 using CloudOnce;
 
 public class Config
@@ -652,7 +652,7 @@ public class Config
     public const string REMOVE_AD = "remove_Ad";
     public static void SetRemoveAd()
     {
-        API.RemoveAds(true);
+        BspLabsAdsMobile.Instance.RemoveAds(true);
         PlayerPrefs.SetInt(REMOVE_AD, 1);
         PlayerPrefs.Save();
     }

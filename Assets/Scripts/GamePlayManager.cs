@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class GamePlayManager : MonoBehaviour
@@ -81,7 +80,6 @@ public class GamePlayManager : MonoBehaviour
     {
         AdjustManager.instance.PlayGame();
         Debug.Log("Play Game");
-        //API.ShowBanner(Gley.MobileAds.BannerPosition.Bottom, Gley.MobileAds.BannerType.Banner);
         BspLabsAdsMobile.Instance.ShowBanner(BannerPosition.BOTTOM, BannerType.Banner);
         lockGroup.SetActive(true);
         isRevive = false;
@@ -121,7 +119,6 @@ public class GamePlayManager : MonoBehaviour
         LoadLevelGame();
         InitViews();
 
-        //FirebaseManager.instance.LogLevelStart(Config.currLevel);
     }
 
     // Update is called once per frame
@@ -375,7 +372,6 @@ public class GamePlayManager : MonoBehaviour
             if (Config.CheckTutorial_2() && Config.isShowTut2) {
                 HideTut2();
             }
-           // FirebaseManager.instance.LogUsePowerUp(FirebaseManager.POWERUP_UNDO, level);
         }
         else if (Config.GetCount_ItemHelp(Config.ITEMHELP_TYPE.UNDO) == 0) {
             if (Config.currCoin >= Config.COIN_PRICE_ITEM)
@@ -407,7 +403,6 @@ public class GamePlayManager : MonoBehaviour
                 HideTut3();
             }
             AdjustManager.instance.Hint();
-            //FirebaseManager.instance.LogUsePowerUp(FirebaseManager.POWERUP_HINT, level);
         }
         else {
             if (Config.currCoin >= Config.COIN_PRICE_ITEM)
@@ -450,7 +445,6 @@ public class GamePlayManager : MonoBehaviour
             {
                 HideTut4();
             }
-//            FirebaseManager.instance.LogUsePowerUp(FirebaseManager.POWERUP_SHUFFLE, level);
         }
         else
         {
@@ -475,7 +469,6 @@ public class GamePlayManager : MonoBehaviour
     public void SetGameWin() {
         if (Config.gameState != Config.GAME_STATE.WIN)
         {
-            //FirebaseManager.instance.LogLevelWin(level);
             SetFinishedGame();
             Config.gameState = Config.GAME_STATE.WIN;
             
@@ -517,7 +510,6 @@ public class GamePlayManager : MonoBehaviour
     {
         if (Config.gameState != Config.GAME_STATE.LOSE)
         {
-           // FirebaseManager.instance.LogLevelLose(Config.currLevel);
             SetFinishedGame();
             Config.gameState = Config.GAME_STATE.LOSE;
             losePopup.ShowLosePopup(level, isRevive);

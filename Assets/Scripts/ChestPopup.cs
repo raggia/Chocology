@@ -11,7 +11,6 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using bonbon;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class ChestPopup : MonoBehaviour
@@ -135,7 +134,6 @@ public class ChestPopup : MonoBehaviour
     {
         lockGroup.gameObject.SetActive(true);
 
-        //API.ShowRewardedVideo(CompleteMethod);
         BspLabsAdsMobile.Instance.ShowRewardedVideo(CompleteMethod);
 
     }

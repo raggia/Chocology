@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class WinPopup2 : MonoBehaviour
@@ -289,8 +288,6 @@ public class WinPopup2 : MonoBehaviour
         DOTween.Kill(sliderReward);
         if (BspLabsAdsMobile.Instance.IsRewardVideoAvailable())
         {
-
-            API.ShowRewardedVideo(CompleteMethod);
             BspLabsAdsMobile.Instance.ShowRewardedVideo(CompleteMethod);
             Debug.Log("Bonus Level Clear Reward Claimed"); 
             AdjustManager.instance.BonusLevelClearRewardClaimed();

@@ -90,7 +90,6 @@ public class RewardPopup : MonoBehaviour
 //                lockGroup.gameObject.SetActive(false);
 //                //WatchAds
 //                WatchAds_Finished();
-////                FirebaseManager.instance.LogShowReward("RewardPopUp");
 //            }
 //            else
 //            {

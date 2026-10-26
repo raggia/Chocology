@@ -42,7 +42,7 @@ namespace Crystal
         /// <summary>
         /// Simulation mode for use in editor only. This can be edited at runtime to toggle between different safe areas.
         /// </summary>
-        public SimDevice Sim = SimDevice.None;
+        public static SimDevice Sim = SimDevice.None;
 
         /// <summary>
         /// Normalised safe areas for iPhone X with Home indicator (ratios are identical to Xs, 11 Pro). Absolute values:
@@ -211,7 +211,6 @@ namespace Crystal
                 Vector2 anchorMax = r.position + r.size;
                 anchorMin.x /= Screen.width;
                 anchorMin.y /= Screen.height;
-                //anchorMin.y = 0;
                 anchorMax.x /= Screen.width;
                 anchorMax.y /= Screen.height;
 

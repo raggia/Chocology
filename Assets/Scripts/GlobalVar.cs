@@ -25,7 +25,6 @@ public static class GlobalVar
     #region PLAYER SAVE DATA
     public const string PlayerPrefs_MisteryChest = "mistery_chest";
     public const string PlayerPrefs_SpeedupChest = "speed_up_chest";
-    public const string PlayerPrefs_FirebaseTokenFCM = "token_fcm";
 
     public static void SetMisteryChestTimer(string _timer)
     {
@@ -47,11 +46,7 @@ public static class GlobalVar
     public static void DeleteKey(string _dataKey)
         => PlayerPrefs.DeleteKey(_dataKey);
 
-    public static void SaveTokenFCM(string _value)
-        => PlayerPrefs.SetString(PlayerPrefs_FirebaseTokenFCM, _value);
 
-    public static string GetToknFCM()
-        => PlayerPrefs.GetString(PlayerPrefs_FirebaseTokenFCM, "");
 
     public static int GetCountDaysReward()
         => PlayerPrefs.GetInt("totalClaimDay", 1);
@@ -103,22 +98,17 @@ public static class GlobalVar
     }
 
 
-    #region FIREBASE ANALYTICS
+    #region ANALYTICS LOGGING
     /// <summary>
     /// Insert the analytics
     /// </summary>
     /// <param name="_parameterName">Parameter name</param>
     public static void CallAnalytics(string _parameterName)
     {
-        //hanling exception for firebase
         try
         {
             Debug.Log($"Calling {_parameterName}");
-            if (Application.isMobilePlatform)
-            {
-                //Firebase.Analytics.FirebaseAnalytics.LogEvent(_parameterName);
 
-            }
         }
         catch (Exception e)
         {

@@ -4,7 +4,6 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using bonbon;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 using System;
 using Random = UnityEngine.Random;
@@ -98,7 +97,6 @@ public class SpinPopup : MonoBehaviour
         btnWatchAds.Interactable = false;
         lockGroup.gameObject.SetActive(true);
 
-        //API.ShowRewardedVideo(CompleteMethod);
         BspLabsAdsMobile.Instance.ShowRewardedVideo(CompleteMethod);
 
         

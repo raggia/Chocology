@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using DG.Tweening;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class GameLevelManager : MonoBehaviour
@@ -441,7 +440,6 @@ public class GameLevelManager : MonoBehaviour
         if (Config.interstitialAd_countWin == 3)
         {
             Config.interstitialAd_countWin = 0;
-            API.ShowInterstitial();
             BspLabsAdsMobile.Instance.ShowInterstitial();
         }
         Debug.Log("Level Clear");

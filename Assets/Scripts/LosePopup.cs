@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class LosePopup : MonoBehaviour
@@ -62,7 +61,6 @@ public class LosePopup : MonoBehaviour
 //                {
 //                    lockGroup.gameObject.SetActive(false);
 //                    Revive_Finished();
-////                    FirebaseManager.instance.LogShowReward("Revive");
 //                }
 //                else
 //                {
@@ -152,7 +150,6 @@ public class LosePopup : MonoBehaviour
         //{
         //    logo.gameObject.SetActive(false);
         //    nativeAdPanel.SetInitNativeAd(AdmobManager.instance.nativeAd);
-        //    FirebaseManager.instance.LogShowNative(Config.currLevel);
         //}
         //else
         //{

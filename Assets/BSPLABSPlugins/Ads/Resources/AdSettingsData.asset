@@ -526,9 +526,9 @@ MonoBehaviour:
         id: RewardedAds
         displayName: Rewarded Placement
         notRequired: 0
-      hasBanner: 1
+      hasBanner: 0
       hasInterstitial: 1
-      hasRewarded: 1
+      hasRewarded: 0
       directedForChildren: 0
     - platform: 1
       enabled: 1
@@ -548,14 +548,13 @@ MonoBehaviour:
         id: RewardedAdsID
         displayName: Rewarded Placement
         notRequired: 0
-      hasBanner: 1
+      hasBanner: 0
       hasInterstitial: 1
-      hasRewarded: 1
+      hasRewarded: 0
       directedForChildren: 0
   debugMode: 0
   enableATT: 0
-  nativePopupText: We will use your data to provide a better and personalized ad
-    experience.
+  nativePopupText: We will use your data to provide a better and personalized ad experience.
   bannerMediation: 1
   interstitialMediation: 1
   rewardedMediation: 1

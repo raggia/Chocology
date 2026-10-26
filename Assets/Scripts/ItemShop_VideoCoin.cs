@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using Gley.MobileAds;
 using BsplabsMobileAds;
 
 public class ItemShop_VideoCoin : MonoBehaviour
@@ -46,7 +45,6 @@ public class ItemShop_VideoCoin : MonoBehaviour
         lockGroup.SetActive(true);
         if (BspLabsAdsMobile.Instance.IsRewardVideoAvailable())
         {
-            //API.ShowRewardedVideo(CompleteMethod);
             BspLabsAdsMobile.Instance.ShowRewardedVideo(CompleteMethod);
 
         }
