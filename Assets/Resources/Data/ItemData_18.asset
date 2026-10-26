@@ -11,5 +11,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2896e483c2321454c98efa52abe6498f, type: 3}
   m_Name: ItemData_18
-  m_EditorClassIdentifier: 
-  itemType: 18
+  m_EditorClassIdentifier:
+  m_ItemType: 18

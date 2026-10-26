@@ -1126,12 +1126,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8f3efcc1c5c4444eb625bac70014a94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnClose: {fileID: 6992543465909496736}
-  popup: {fileID: 6992543464149286668}
-  lockGroup: {fileID: 6992543465234299834}
-  txtCounStar: {fileID: 6992543465713430886}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_LevelPopupFields:
+    m_BtnClose: {fileID: 6992543465909496736}
+    m_Popup: {fileID: 6992543464149286668}
+    m_LockGroup: {fileID: 6992543465234299834}
+    m_TxtCounStar: {fileID: 6992543465713430886}
 --- !u!1 &6992543465713430904
 GameObject:
   m_ObjectHideFlags: 0
@@ -1959,17 +1960,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50e129276a162ab43b460ba6151d1177, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtLevel: {fileID: 8295971668920509249}
-  iconLock: {fileID: 8295971668912583228}
-  listStars:
-  - {fileID: 8295971668581082337}
-  - {fileID: 8295971667959339830}
-  - {fileID: 8295971669292122146}
-  spriteStar_On: {fileID: 21300000, guid: ef73a20f85e63e649bdddfa79ae9b974, type: 3}
-  spriteStar_Off: {fileID: 21300000, guid: 228cdc5032351b147b29145d3aa7eef6, type: 3}
-  btnLevel: {fileID: 8295971668548599931}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemLevelFields:
+    m_TxtLevel: {fileID: 8295971668920509249}
+    m_IconLock: {fileID: 8295971668912583228}
+    m_ListStars:
+    - {fileID: 8295971668581082337}
+    - {fileID: 8295971667959339830}
+    - {fileID: 8295971669292122146}
+    m_SpriteStarOn: {fileID: 21300000, guid: ef73a20f85e63e649bdddfa79ae9b974, type: 3}
+    m_SpriteStarOff: {fileID: 21300000, guid: 228cdc5032351b147b29145d3aa7eef6, type: 3}
+    m_BtnLevel: {fileID: 8295971668548599931}
 --- !u!1 &8295971668548599927
 GameObject:
   m_ObjectHideFlags: 0

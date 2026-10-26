@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: LevelPlayAdUnits
   m_EditorClassIdentifier: Assembly-CSharp::Rush.Integrations.Ads.LevelPlayAdUnitSettings
   m_Android:
-    m_BannerAdUnitId: 
-    m_InterstitialAdUnitId: 3s9d1qdw23fyo0b8
-    m_RewardedAdUnitId: 
+    m_PlatformFieldFields:
+      m_BannerAdUnitId:
+      m_InterstitialAdUnitId: z3bhu9hyhwi0hw55
+      m_RewardedAdUnitId: 961n9emppvpo3fkd
   m_Ios:
-    m_BannerAdUnitId: 
-    m_InterstitialAdUnitId: 
-    m_RewardedAdUnitId: 
+    m_PlatformFieldFields:
+      m_BannerAdUnitId:
+      m_InterstitialAdUnitId:
+      m_RewardedAdUnitId:

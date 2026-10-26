@@ -74,11 +74,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ded29c3cf632ef7489cebec65ddaf0a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemTile: {fileID: 1792230903}
-  countCollision: 0
-  listCollisionObjecs: []
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemTileCheckCollisionFields:
+    m_ItemTile: {fileID: 1792230903}
+    m_CountCollision: 0
+    m_ListCollisionObjecs: []
 --- !u!61 &9210098477650405062
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -251,18 +252,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 473b7492273af1241bcea8434fc5d9fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bg: {fileID: 6634154993915560018}
-  icon: {fileID: 6634154992541695298}
-  shadow: {fileID: 6634154992910345899}
-  objGroup: {fileID: 198321207366163438}
-  itemTileCheckCollision: {fileID: 2888985500404496480}
-  indexShowTile: 0
-  floorIndex: 0
-  posTile: {x: 0, y: 0}
-  itemData: {fileID: 0}
-  itemTileState: 0
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemTileFields:
+    m_Bg: {fileID: 6634154993915560018}
+    m_Icon: {fileID: 6634154992541695298}
+    m_Shadow: {fileID: 6634154992910345899}
+    m_ObjGroup: {fileID: 198321207366163438}
+    m_ItemTileCheckCollision: {fileID: 2888985500404496480}
+    m_IndexShowTile: 0
+    m_FloorIndex: 0
+    m_PosTile: {x: 0, y: 0}
+    m_ItemData: {fileID: 0}
+    m_ItemTileState: 0
 --- !u!61 &1310472532313892797
 BoxCollider2D:
   m_ObjectHideFlags: 0

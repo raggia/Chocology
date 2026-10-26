@@ -671,14 +671,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50e129276a162ab43b460ba6151d1177, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtLevel: {fileID: 5456323576626564755}
-  iconLock: {fileID: 5456323576634367982}
-  listStars:
-  - {fileID: 5456323576966056243}
-  - {fileID: 5456323575541118692}
-  - {fileID: 5456323576317668848}
-  spriteStar_On: {fileID: 21300000, guid: 094c18c4cd83fa3469a644b40ee153e4, type: 3}
-  spriteStar_Off: {fileID: 21300000, guid: dbfb566f18a9ab64aacd565de57e2d17, type: 3}
-  btnLevel: {fileID: 5456323577061518761}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemLevelFields:
+    m_TxtLevel: {fileID: 5456323576626564755}
+    m_IconLock: {fileID: 5456323576634367982}
+    m_ListStars:
+    - {fileID: 5456323576966056243}
+    - {fileID: 5456323575541118692}
+    - {fileID: 5456323576317668848}
+    m_SpriteStarOn: {fileID: 21300000, guid: 094c18c4cd83fa3469a644b40ee153e4, type: 3}
+    m_SpriteStarOff: {fileID: 21300000, guid: dbfb566f18a9ab64aacd565de57e2d17, type: 3}
+    m_BtnLevel: {fileID: 5456323577061518761}

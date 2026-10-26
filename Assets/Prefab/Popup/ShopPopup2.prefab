@@ -162,13 +162,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc585eced2faec40b072394b3cb6481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configPackData:
-    idPack: 2
-    configItemShopDatas: []
-  btnBuy: {fileID: 8615274258261948056}
-  txtPrice: {fileID: 8615274257019311958}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopIAPFields:
+    m_ConfigPackData:
+      m_IdPack: 2
+      m_ConfigItemShopDatas: []
+    m_BtnBuy: {fileID: 8615274258261948056}
+    m_TxtPrice: {fileID: 8615274257019311958}
 --- !u!1 &8615274257011650721
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,32 +567,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3214ca3da36446d4383ed3e5a107ea35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popup: {fileID: 8615274258214455096}
-  btnClose: {fileID: 8615274258984586030}
-  lockGroup: {fileID: 8615274258560060891}
-  scrollView: {fileID: 8615274258425552694}
-  btnLoadMores: {fileID: 8615274257187217384}
-  loadMoreObj: {fileID: 8615274258265811000}
-  listLoadMore_ItemShops:
-  - {fileID: 8615274258591184738}
-  - {fileID: 8615274256969716838}
-  - {fileID: 8615274257745814151}
-  - {fileID: 8615274258372257675}
-  - {fileID: 8615274257902604029}
-  - {fileID: 8615274257242435871}
-  - {fileID: 8615274258032450396}
-  - {fileID: 8615274259019130986}
-  iapRemoveAd: {fileID: 8615274256969716832}
-  listItemShopIAPs:
-  - {fileID: 8615274257902604031}
-  - {fileID: 8615274258372257685}
-  - {fileID: 8615274257745814147}
-  - {fileID: 8615274256969716832}
-  - {fileID: 8615274258591184748}
-  - {fileID: 8615274258083894377}
-  - {fileID: 8615274257396516087}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ShopPopup2Fields:
+    m_Popup: {fileID: 8615274258214455096}
+    m_BtnClose: {fileID: 8615274258984586030}
+    m_LockGroup: {fileID: 8615274258560060891}
+    m_ScrollView: {fileID: 8615274258425552694}
+    m_BtnLoadMores: {fileID: 8615274257187217384}
+    m_LoadMoreObj: {fileID: 8615274258265811000}
+    m_ListLoadMoreItemShops:
+    - {fileID: 8615274258591184738}
+    - {fileID: 8615274256969716838}
+    - {fileID: 8615274257745814151}
+    - {fileID: 8615274258372257675}
+    - {fileID: 8615274257902604029}
+    - {fileID: 8615274257242435871}
+    - {fileID: 8615274258032450396}
+    - {fileID: 8615274259019130986}
+    m_IapRemoveAd: {fileID: 8615274256969716832}
+    m_ListItemShopIAPs:
+    - {fileID: 8615274257902604031}
+    - {fileID: 8615274258372257685}
+    - {fileID: 8615274257745814147}
+    - {fileID: 8615274256969716832}
+    - {fileID: 8615274258591184748}
+    - {fileID: 8615274258083894377}
+    - {fileID: 8615274257396516087}
 --- !u!1 &8615274257061810160
 GameObject:
   m_ObjectHideFlags: 0
@@ -1926,9 +1928,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e803eadb13af93f4b8748be5c74fe77f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtCoin: {fileID: 8615274258272306685}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_TxtCoin: {fileID: 8615274258272306685}
 --- !u!225 &8615274257211295795
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2237,15 +2239,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f05fa22942f99b14b883267b839a5edd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemShopData:
-    shopItemType: 3
-    countItem: 1
-    price: 100
-  txtCounItem: {fileID: 8615274257011650723}
-  txtPrice: {fileID: 8615274257752179229}
-  btnBuy: {fileID: 8615274257465377641}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopFields:
+    m_ItemShopData:
+      m_ConfigItemShopDataFields:
+        m_ShopItemType: 3
+        m_CountItem: 1
+        m_Price: 100
+    m_TxtCounItem: {fileID: 8615274257011650723}
+    m_TxtPrice: {fileID: 8615274257752179229}
+    m_BtnBuy: {fileID: 8615274257465377641}
 --- !u!1 &8615274257246163092
 GameObject:
   m_ObjectHideFlags: 0
@@ -3262,25 +3266,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc585eced2faec40b072394b3cb6481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configPackData:
-    idPack: 9
-    configItemShopDatas:
-    - shopItemType: 0
-      countItem: 300
-      price: 0
-    - shopItemType: 1
-      countItem: 5
-      price: 0
-    - shopItemType: 2
-      countItem: 5
-      price: 0
-    - shopItemType: 3
-      countItem: 5
-      price: 0
-  btnBuy: {fileID: 8615274258916212003}
-  txtPrice: {fileID: 8615274258510429852}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopIAPFields:
+    m_ConfigPackData:
+      m_IdPack: 9
+      m_ConfigItemShopDatas:
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 0
+          m_CountItem: 300
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 1
+          m_CountItem: 5
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 2
+          m_CountItem: 5
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 3
+          m_CountItem: 5
+          m_Price: 0
+    m_BtnBuy: {fileID: 8615274258916212003}
+    m_TxtPrice: {fileID: 8615274258510429852}
 --- !u!1 &8615274257408022927
 GameObject:
   m_ObjectHideFlags: 0
@@ -4438,16 +4447,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcd6328c2cc2a884a859c36844b8c872, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemShopData:
-    shopItemType: 0
-    countItem: 50
-    price: 0
-  txtCounItem: {fileID: 8615274258585189075}
-  txtCountVideo: {fileID: 8615274258611346153}
-  btnBuy: {fileID: 8615274258153384018}
-  lockGroup: {fileID: 8615274258560060891}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShop_VideoCoinFields:
+    m_ItemShopData:
+      m_ConfigItemShopDataFields:
+        m_ShopItemType: 0
+        m_CountItem: 50
+        m_Price: 0
+    m_TxtCounItem: {fileID: 8615274258585189075}
+    m_TxtCountVideo: {fileID: 8615274258611346153}
+    m_BtnBuy: {fileID: 8615274258153384018}
+    m_LockGroup: {fileID: 8615274258560060891}
 --- !u!1 &8615274257644870820
 GameObject:
   m_ObjectHideFlags: 0
@@ -5159,16 +5170,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc585eced2faec40b072394b3cb6481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configPackData:
-    idPack: 8
-    configItemShopDatas:
-    - shopItemType: 0
-      countItem: 1000
-      price: 0
-  btnBuy: {fileID: 8615274258533291792}
-  txtPrice: {fileID: 8615274257105039360}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopIAPFields:
+    m_ConfigPackData:
+      m_IdPack: 8
+      m_ConfigItemShopDatas:
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 0
+          m_CountItem: 1000
+          m_Price: 0
+    m_BtnBuy: {fileID: 8615274258533291792}
+    m_TxtPrice: {fileID: 8615274257105039360}
 --- !u!1 &8615274257745891911
 GameObject:
   m_ObjectHideFlags: 0
@@ -6150,16 +6163,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc585eced2faec40b072394b3cb6481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configPackData:
-    idPack: 13
-    configItemShopDatas:
-    - shopItemType: 0
-      countItem: 5000
-      price: 0
-  btnBuy: {fileID: 8615274257044241300}
-  txtPrice: {fileID: 8615274257811464535}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopIAPFields:
+    m_ConfigPackData:
+      m_IdPack: 13
+      m_ConfigItemShopDatas:
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 0
+          m_CountItem: 5000
+          m_Price: 0
+    m_BtnBuy: {fileID: 8615274257044241300}
+    m_TxtPrice: {fileID: 8615274257811464535}
 --- !u!1 &8615274257916300149
 GameObject:
   m_ObjectHideFlags: 0
@@ -6705,15 +6720,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f05fa22942f99b14b883267b839a5edd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemShopData:
-    shopItemType: 2
-    countItem: 1
-    price: 100
-  txtCounItem: {fileID: 8615274258259204487}
-  txtPrice: {fileID: 8615274258347599157}
-  btnBuy: {fileID: 8615274257246163088}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopFields:
+    m_ItemShopData:
+      m_ConfigItemShopDataFields:
+        m_ShopItemType: 2
+        m_CountItem: 1
+        m_Price: 100
+    m_TxtCounItem: {fileID: 8615274258259204487}
+    m_TxtPrice: {fileID: 8615274258347599157}
+    m_BtnBuy: {fileID: 8615274257246163088}
 --- !u!1 &8615274258058760890
 GameObject:
   m_ObjectHideFlags: 0
@@ -7033,25 +7050,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc585eced2faec40b072394b3cb6481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configPackData:
-    idPack: 10
-    configItemShopDatas:
-    - shopItemType: 0
-      countItem: 2000
-      price: 0
-    - shopItemType: 1
-      countItem: 20
-      price: 0
-    - shopItemType: 2
-      countItem: 20
-      price: 0
-    - shopItemType: 3
-      countItem: 20
-      price: 0
-  btnBuy: {fileID: 8615274257187860613}
-  txtPrice: {fileID: 8615274257143387829}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopIAPFields:
+    m_ConfigPackData:
+      m_IdPack: 10
+      m_ConfigItemShopDatas:
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 0
+          m_CountItem: 2000
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 1
+          m_CountItem: 20
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 2
+          m_CountItem: 20
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 3
+          m_CountItem: 20
+          m_Price: 0
+    m_BtnBuy: {fileID: 8615274257187860613}
+    m_TxtPrice: {fileID: 8615274257143387829}
 --- !u!1 &8615274258086073818
 GameObject:
   m_ObjectHideFlags: 0
@@ -7140,10 +7162,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16a1f9647b866b240887ea46c1f573d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtTime: {fileID: 8615274257079154231}
-  TIME_START: 171600
+  m_Name:
+  m_EditorClassIdentifier:
+  m_TxtTime: {fileID: 8615274257079154231}
+  m_TimeStart: 171600
 --- !u!1 &8615274258101396380
 GameObject:
   m_ObjectHideFlags: 0
@@ -9923,16 +9945,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc585eced2faec40b072394b3cb6481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configPackData:
-    idPack: 12
-    configItemShopDatas:
-    - shopItemType: 0
-      countItem: 2000
-      price: 0
-  btnBuy: {fileID: 8615274257468544025}
-  txtPrice: {fileID: 8615274258166814963}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopIAPFields:
+    m_ConfigPackData:
+      m_IdPack: 12
+      m_ConfigItemShopDatas:
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 0
+          m_CountItem: 2000
+          m_Price: 0
+    m_BtnBuy: {fileID: 8615274257468544025}
+    m_TxtPrice: {fileID: 8615274258166814963}
 --- !u!1 &8615274258373844821
 GameObject:
   m_ObjectHideFlags: 0
@@ -11277,25 +11301,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc585eced2faec40b072394b3cb6481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configPackData:
-    idPack: 11
-    configItemShopDatas:
-    - shopItemType: 0
-      countItem: 5000
-      price: 0
-    - shopItemType: 1
-      countItem: 100
-      price: 0
-    - shopItemType: 2
-      countItem: 100
-      price: 0
-    - shopItemType: 3
-      countItem: 100
-      price: 0
-  btnBuy: {fileID: 8615274258627717234}
-  txtPrice: {fileID: 8615274258643247347}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopIAPFields:
+    m_ConfigPackData:
+      m_IdPack: 11
+      m_ConfigItemShopDatas:
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 0
+          m_CountItem: 5000
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 1
+          m_CountItem: 100
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 2
+          m_CountItem: 100
+          m_Price: 0
+      - m_ConfigItemShopDataFields:
+          m_ShopItemType: 3
+          m_CountItem: 100
+          m_Price: 0
+    m_BtnBuy: {fileID: 8615274258627717234}
+    m_TxtPrice: {fileID: 8615274258643247347}
 --- !u!1 &8615274258599317780
 GameObject:
   m_ObjectHideFlags: 0
@@ -12095,14 +12124,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10d251d451c42a9428a4521a13dfb606, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemShopData:
-    shopItemType: 0
-    countItem: 20
-    price: 0
-  txtCounItem: {fileID: 8615274258392668927}
-  btnBuy: {fileID: 8615274258811024545}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShop_FreeCoinFields:
+    m_ItemShopData:
+      m_ConfigItemShopDataFields:
+        m_ShopItemType: 0
+        m_CountItem: 20
+        m_Price: 0
+    m_TxtCounItem: {fileID: 8615274258392668927}
+    m_BtnBuy: {fileID: 8615274258811024545}
 --- !u!1 &8615274258723152497
 GameObject:
   m_ObjectHideFlags: 0
@@ -14364,15 +14395,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f05fa22942f99b14b883267b839a5edd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemShopData:
-    shopItemType: 1
-    countItem: 1
-    price: 100
-  txtCounItem: {fileID: 8615274258727528599}
-  txtPrice: {fileID: 8615274258973547494}
-  btnBuy: {fileID: 8615274259093985100}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ItemShopFields:
+    m_ItemShopData:
+      m_ConfigItemShopDataFields:
+        m_ShopItemType: 1
+        m_CountItem: 1
+        m_Price: 100
+    m_TxtCounItem: {fileID: 8615274258727528599}
+    m_TxtPrice: {fileID: 8615274258973547494}
+    m_BtnBuy: {fileID: 8615274259093985100}
 --- !u!1 &8615274259020426370
 GameObject:
   m_ObjectHideFlags: 0

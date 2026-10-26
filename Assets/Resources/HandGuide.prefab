@@ -124,22 +124,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f1501bfac8c4d0785f772f6a9181f81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Pivot: {fileID: 1466374875580233302}
-  m_Keys:
-  - m_Duration: 0.2667
-    m_RotationZ: -3.83
-    m_OffsetY: 0.1024
-  - m_Duration: 0.2666
-    m_RotationZ: 6.55
-    m_OffsetY: -0.0355
-  - m_Duration: 0.3
-    m_RotationZ: 0
-    m_OffsetY: 0
-  m_Ease: 4
-  m_LoopType: 0
-  m_LoopCount: -1
+  m_Name:
+  m_EditorClassIdentifier:
+  m_HandGuideTapAnimationFields:
+    m_Pivot: {fileID: 1466374875580233302}
+    m_Keys:
+    - m_HandTapKeyFieldFields:
+        m_Duration: 0.2667
+        m_RotationZ: -3.83
+        m_OffsetY: 0.1024
+    - m_HandTapKeyFieldFields:
+        m_Duration: 0.2666
+        m_RotationZ: 6.55
+        m_OffsetY: -0.0355
+    - m_HandTapKeyFieldFields:
+        m_Duration: 0.3
+        m_RotationZ: 0
+        m_OffsetY: 0
+    m_Ease: 4
+    m_LoopType: 0
+    m_LoopCount: -1
 --- !u!1 &1466374875580233301
 GameObject:
   m_ObjectHideFlags: 0

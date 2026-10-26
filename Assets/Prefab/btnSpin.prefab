@@ -181,14 +181,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f82efb9ae1162a499b27c0ed7eb3aba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UseText: 1
-  isRound: 1
-  isUse_S: 0
-  timeTxt: {fileID: 455286024193565340}
-  UseImage: 0
-  timeImg: {fileID: 0}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_CountDownTimeGroupFields:
+    m_UseText: 1
+    m_IsRound: 1
+    m_IsUseS: 0
+    m_TimeTxt: {fileID: 455286024193565340}
+    m_UseImage: 0
+    m_TimeImg: {fileID: 0}
 --- !u!1 &455286024955308824
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,10 +586,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4dcad070b7e8f348b2ee51c25b6a665, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  icon: {fileID: 455286023963562490}
-  countDownTimeGroup: {fileID: 455286024193565343}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Icon: {fileID: 455286023963562490}
+  m_CountDownTimeGroup: {fileID: 455286024193565343}
 --- !u!1 &455286025801022059
 GameObject:
   m_ObjectHideFlags: 0

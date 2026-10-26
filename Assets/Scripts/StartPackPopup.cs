@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class StartPackPopup : MonoBehaviour
 {
-    public ConfigPackData configPackData;
+    public global::Rush.Chocology.Economy.ConfigPackData configPackData;
     public List<ItemPack> listItemPack;
     public static StartPackPopup instance;
     public BBUIButton btnClose, btnBuy;
@@ -21,53 +21,54 @@ public class StartPackPopup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PurchaserManager.InitializeSucceeded += PurchaserManager_InitializeSucceeded;
+        global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.InitializeSucceeded += PurchaserManager_InitializeSucceeded;
         InitIAP();
         // InitPacks();
         btnClose.OnPointerClickCallBack_Completed.AddListener(TouchClose);
         btnBuy.OnPointerClickCallBack_Completed.AddListener(TouchBuy);
-        Debug.Log("Config.IAP_ID.starter_pack.ToString()): " + Config.IAP_ID.tilematch_starter_pack.ToString());
+        Debug.Log("Config.IAP_ID.starter_pack.ToString()): " + global::Rush.Chocology.Economy.Config.IAP_ID.tilematch_starter_pack.ToString());
         popup.GetComponent<BBUIView>().HideBehavior.onCallback_Completed.AddListener(HidePopup_Finished);
     }
 
-
     private void OnDestroy()
     {
-        PurchaserManager.InitializeSucceeded -= PurchaserManager_InitializeSucceeded;
+        global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.InitializeSucceeded -= PurchaserManager_InitializeSucceeded;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
-
-    public void PurchaserManager_InitializeSucceeded() {
+    public void PurchaserManager_InitializeSucceeded()
+    {
         InitIAP();
     }
 
-
-    public void InitIAP() {
-        if (PurchaserManager.instance.IsInitialized())
+    public void InitIAP()
+    {
+        if (global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.Instance.IsInitialized())
         {
-            txtPrice.text = PurchaserManager.instance.GetLocalizedPriceString(Config.IAP_ID.tilematch_starter_pack.ToString());
+            txtPrice.text = global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.Instance.ReadLocalizedPriceString(global::Rush.Chocology.Economy.Config.IAP_ID.tilematch_starter_pack.ToString());
             btnBuy.Interactable = true;
         }
-        else {
+        else
+        {
             txtPrice.text = "";
             btnBuy.Interactable = false;
         }
     }
 
-    public void InitPacks() {
-        for (int i = 0; i < configPackData.configItemShopDatas.Count; i++) {
-            listItemPack[i].SetItemPack(configPackData.configItemShopDatas[i]);
+    public void InitPacks()
+    {
+        for (int i = 0; i < configPackData.ConfigItemShopDatas.Count; i++)
+        {
+            listItemPack[i].SetItemPack(configPackData.ConfigItemShopDatas[i]);
         }
     }
 
-
-    public void ShowStartPack() {
+    public void ShowStartPack()
+    {
         gameObject.SetActive(true);
         InitViews();
     }
@@ -78,20 +79,20 @@ public class StartPackPopup : MonoBehaviour
         popup.GetComponent<BBUIView>().HideView();
     }
 
-    public void TouchBuy() {
-        
+    public void TouchBuy()
+    {
         lockGroup.gameObject.SetActive(true);
 #if UNITY_EDITOR
         btnBuy.Interactable = false;
         BuyStartPackSuccess();
         return;
 #endif
-        PurchaserManager.instance.BuyConsumable(Config.IAP_ID.tilematch_starter_pack, (string _iapID, PurchaserManager.IAP_CALLBACK_STATE _state) =>
+        global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.Instance.BuyConsumable(global::Rush.Chocology.Economy.Config.IAP_ID.tilematch_starter_pack, (string _iapID, global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.IAP_CALLBACK_STATE _state) =>
         {
-            if (_state == PurchaserManager.IAP_CALLBACK_STATE.SUCCESS)
+            if (_state == global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.IAP_CALLBACK_STATE.SUCCESS)
             {
                 lockGroup.gameObject.SetActive(false);
-                if (_iapID.Equals(Config.IAP_ID.tilematch_starter_pack.ToString()))
+                if (_iapID.Equals(global::Rush.Chocology.Economy.Config.IAP_ID.tilematch_starter_pack.ToString()))
                 {
                     //Buy
                     btnBuy.Interactable = false;
@@ -101,41 +102,37 @@ public class StartPackPopup : MonoBehaviour
             else
             {
                 lockGroup.gameObject.SetActive(false);
-                NotificationPopup.instance.AddNotification("Buy Fail!");
+                global::Rush.Chocology.Notifications.NotificationPopup.Instance.AddNotification("Buy Fail!");
             }
         });
     }
 
-    public void BuyStartPackSuccess() {
-        //for (int i = 0; i < configPackData.configItemShopDatas.Count; i++)
-        //{
-        //    Config.BuySucces_ItemShop(configPackData.configItemShopDatas[i]);
-        //}
-
-        //popup.GetComponent<BBUIView>().HideView();
-        Config.SetRemoveAd();
-        Config.SetBuyIAP(configPackData.idPack);
-        NotificationPopup.instance.AddNotification("Buy Success!");
-        
-        if (MenuManager.instance != null && MenuManager.instance.isActiveAndEnabled)
+    public void BuyStartPackSuccess()
+    {
+        global::Rush.Chocology.Economy.Config.Runtime.SetRemoveAd();
+        global::Rush.Chocology.Economy.Config.Runtime.SetBuyIAP(configPackData.IdPack);
+        global::Rush.Chocology.Notifications.NotificationPopup.Instance.AddNotification("Buy Success!");
+        if (global::Rush.Chocology.LevelMap.MenuManager.Instance != null && global::Rush.Chocology.LevelMap.MenuManager.Instance.isActiveAndEnabled)
         {
-            MenuManager.instance.SetBuyStarterPackSuccess();
-            MenuManager.instance.OpenRewardPopup(configPackData.configItemShopDatas, false);
+            global::Rush.Chocology.LevelMap.MenuManager.Instance.SetBuyStarterPackSuccess();
+            global::Rush.Chocology.LevelMap.MenuManager.Instance.OpenRewardPopup(configPackData.ConfigItemShopDatas, false);
         }
+
         gameObject.SetActive(false);
     }
 
-    public void HidePopup_Finished() {
+    public void HidePopup_Finished()
+    {
         gameObject.SetActive(false);
     }
 
-    public void InitViews() {
-        SoundManager.instance.PlaySound_Popup();
+    public void InitViews()
+    {
+        global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundPopup();
         lockGroup.gameObject.SetActive(false);
         popup.gameObject.SetActive(false);
         btnBuy.gameObject.SetActive(false);
         btnClose.gameObject.SetActive(false);
-        
         for (int i = 0; i < listItemPack.Count; i++)
         {
             listItemPack[i].itemPackView.SetActive(false);
@@ -144,7 +141,8 @@ public class StartPackPopup : MonoBehaviour
         InitView_ShowView();
     }
 
-    public void InitView_ShowView() {
+    public void InitView_ShowView()
+    {
         Sequence sequenceShowView = DOTween.Sequence();
         sequenceShowView.InsertCallback(0.01f, () =>
         {
@@ -156,7 +154,6 @@ public class StartPackPopup : MonoBehaviour
             btnBuy.gameObject.SetActive(false);
             btnBuy.gameObject.GetComponent<BBUIView>().ShowView();
         });
-        
         sequenceShowView.InsertCallback(1f, () =>
         {
             btnClose.gameObject.SetActive(false);

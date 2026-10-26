@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6d48eaa380bab4478e9af4c8bb56211, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bg: {fileID: 7450648993620054783}
-  txtContent: {fileID: 7450648993241145481}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Bg: {fileID: 7450648993620054783}
+  m_TxtContent: {fileID: 7450648993241145481}

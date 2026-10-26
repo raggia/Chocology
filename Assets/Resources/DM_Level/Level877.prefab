@@ -2142,61 +2142,62 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60ee6da1b5bcdee498bb9fd9ad4c891a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configLevelGame:
-    timeA: 5
-    listScrore_Stars:
-    - 0
-    - 25
-    - 50
-    - 75
-    listRewards_CoinValue: 050000000a0000000c0000000f000000
-    listXReward_Value: 02000000030000000400000005000000
-    listXReward_Percent: 3200000014000000140000000a000000
-  listItemDataOnMaps:
-  - {fileID: 11400000, guid: a23947c60c9e88f4e8a7fe9ecfc67e6e, type: 2}
-  - {fileID: 11400000, guid: f1647af87d4e82a4dbe57ac1896615ed, type: 2}
-  - {fileID: 11400000, guid: 3c06293ebeb016640b3debc3b3ee3531, type: 2}
-  - {fileID: 11400000, guid: 31d499a0ad9af7a4a9281b035fec2707, type: 2}
-  - {fileID: 11400000, guid: 91e71c6298d892a46b6a6dbcd424016d, type: 2}
-  - {fileID: 11400000, guid: 8c3e850d0d5780848bc79f8eeac5001f, type: 2}
-  - {fileID: 11400000, guid: c4996d55ba1a0de41a9319af8f366279, type: 2}
-  - {fileID: 11400000, guid: 3d08a454d6a05d6498aa9d409c71521e, type: 2}
-  itemTilePrefab: {fileID: 1792230903, guid: 12ca149c31caf814385f8e79ab031fb4, type: 3}
-  tileMapGroup: {fileID: 381914150051325871}
-  listTileMaps:
-  - {fileID: 381914148821512712}
-  - {fileID: 381914150344766553}
-  - {fileID: 381914149869218505}
-  - {fileID: 381914148510264222}
-  - {fileID: 381914150113354404}
-  - {fileID: 1150651875232217211}
-  - {fileID: 6604591525037474370}
-  - {fileID: 6179268389384378805}
-  - {fileID: 1637675807243434747}
-  - {fileID: 9181996778216517857}
-  listFloors:
-  - {fileID: 381914150318322462}
-  - {fileID: 3811505901639635842}
-  - {fileID: 4272685371500310877}
-  - {fileID: 381914150532386673}
-  - {fileID: 3781537954133980464}
-  - {fileID: 2329287637422372912}
-  - {fileID: 2278456418719377590}
-  - {fileID: 7506025406689310845}
-  - {fileID: 1988828692306503734}
-  - {fileID: 8094823334456777163}
-  slotBG: {fileID: 381914149640802196}
-  itemTileSlotPrefab: {fileID: 6643816521605669446, guid: 31a30153169c16948a53a9366331aa6c,
-    type: 3}
-  listItemSlots: []
-  slotParentTranform: {fileID: 381914149857295387}
-  listCheckUndo_ItemTileSlots: []
-  listShuffle_ItemTiles: []
-  listSuggest_ItemTiles: []
-  listItemTile_Tutorials: []
-  handGuild: {fileID: 0}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_GameLevelManagerFields:
+    m_ConfigLevelGame:
+      m_ConfigLevelGameFields:
+        m_TimeA: 5
+        m_ListScroreStars:
+        - 0
+        - 25
+        - 50
+        - 75
+        m_ListRewardsCoinValue: 050000000a0000000c0000000f000000
+        m_ListXRewardValue: 02000000030000000400000005000000
+        m_ListXRewardPercent: 3200000014000000140000000a000000
+    m_ListItemDataOnMaps:
+    - {fileID: 11400000, guid: a23947c60c9e88f4e8a7fe9ecfc67e6e, type: 2}
+    - {fileID: 11400000, guid: f1647af87d4e82a4dbe57ac1896615ed, type: 2}
+    - {fileID: 11400000, guid: 3c06293ebeb016640b3debc3b3ee3531, type: 2}
+    - {fileID: 11400000, guid: 31d499a0ad9af7a4a9281b035fec2707, type: 2}
+    - {fileID: 11400000, guid: 91e71c6298d892a46b6a6dbcd424016d, type: 2}
+    - {fileID: 11400000, guid: 8c3e850d0d5780848bc79f8eeac5001f, type: 2}
+    - {fileID: 11400000, guid: c4996d55ba1a0de41a9319af8f366279, type: 2}
+    - {fileID: 11400000, guid: 3d08a454d6a05d6498aa9d409c71521e, type: 2}
+    m_ItemTilePrefab: {fileID: 1792230903, guid: 12ca149c31caf814385f8e79ab031fb4, type: 3}
+    m_TileMapGroup: {fileID: 381914150051325871}
+    m_ListTileMaps:
+    - {fileID: 381914148821512712}
+    - {fileID: 381914150344766553}
+    - {fileID: 381914149869218505}
+    - {fileID: 381914148510264222}
+    - {fileID: 381914150113354404}
+    - {fileID: 1150651875232217211}
+    - {fileID: 6604591525037474370}
+    - {fileID: 6179268389384378805}
+    - {fileID: 1637675807243434747}
+    - {fileID: 9181996778216517857}
+    m_ListFloors:
+    - {fileID: 381914150318322462}
+    - {fileID: 3811505901639635842}
+    - {fileID: 4272685371500310877}
+    - {fileID: 381914150532386673}
+    - {fileID: 3781537954133980464}
+    - {fileID: 2329287637422372912}
+    - {fileID: 2278456418719377590}
+    - {fileID: 7506025406689310845}
+    - {fileID: 1988828692306503734}
+    - {fileID: 8094823334456777163}
+    m_SlotBG: {fileID: 381914149640802196}
+    m_ItemTileSlotPrefab: {fileID: 6643816521605669446, guid: 31a30153169c16948a53a9366331aa6c, type: 3}
+    m_ListItemSlots: []
+    m_SlotParentTranform: {fileID: 381914149857295387}
+    m_ListCheckUndoItemTileSlots: []
+    m_ListShuffleItemTiles: []
+    m_ListSuggestItemTiles: []
+    m_ListItemTileTutorials: []
+    m_HandGuild: {fileID: 0}
 --- !u!1 &381914150255275330
 GameObject:
   m_ObjectHideFlags: 0

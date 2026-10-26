@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created on 2022
  *
  * Copyright (c) 2022 dotmobstudio
@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class ItemPack : MonoBehaviour
 {
     public Text txtCountItem;
@@ -15,20 +16,20 @@ public class ItemPack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
-    public void SetItemPack(ConfigItemShopData configItemShopData) {
-        txtCountItem.text = $"x{configItemShopData.countItem}";
+    public void SetItemPack(global::Rush.Chocology.Economy.ConfigItemShopData configItemShopData)
+    {
+        txtCountItem.text = $"x{(configItemShopData.CountItem)}";
     }
 
-    public void ShowItemPack() {
+    public void ShowItemPack()
+    {
         itemPackView.GetComponent<BBUIView>().ShowView();
     }
 }

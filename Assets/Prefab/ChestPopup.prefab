@@ -1153,28 +1153,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebd7928571a4fb54ca83a577e1894350, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnClose: {fileID: 1958175327390573316}
-  btnWatchAds: {fileID: 1958175326990114967}
-  popup: {fileID: 1958175326174441425}
-  lockGroup: {fileID: 1958175326654135132}
-  objLight: {fileID: 1958175327105598145}
-  objChest: {fileID: 1958175326590578241}
-  objChest2: {fileID: 1958175327931081161}
-  listDatas: []
-  rewardItem_Coin_Prefab: {fileID: 1491398509847894504, guid: 8f9d87ce5be1c594596f0ec519082f7c,
-    type: 3}
-  rewardItem_Undo_Prefab: {fileID: 1589396130640849096, guid: b3c641c76da5f144f9beec87273beb3b,
-    type: 3}
-  rewardItem_Suggest_Prefab: {fileID: 1589396130640849096, guid: 69fdfb3382c8537438d6196da35c5f1d,
-    type: 3}
-  rewardItem_Shuffle_Prefab: {fileID: 1589396130640849096, guid: 782aa88c40ca2964d951dde42cbddc67,
-    type: 3}
-  contentReward: {fileID: 1958175327281386998}
-  fx1: {fileID: 0}
-  fx2: {fileID: 0}
-  fx3: {fileID: 0}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_ChestPopupFields:
+    m_BtnClose: {fileID: 1958175327390573316}
+    m_BtnWatchAds: {fileID: 1958175326990114967}
+    m_Popup: {fileID: 1958175326174441425}
+    m_LockGroup: {fileID: 1958175326654135132}
+    m_ObjLight: {fileID: 1958175327105598145}
+    m_ObjChest: {fileID: 1958175326590578241}
+    m_ObjChest2: {fileID: 1958175327931081161}
+    m_ListDatas: []
+    m_RewardItemCoinPrefab: {fileID: 1491398509847894504, guid: 8f9d87ce5be1c594596f0ec519082f7c, type: 3}
+    m_RewardItemUndoPrefab: {fileID: 1589396130640849096, guid: b3c641c76da5f144f9beec87273beb3b, type: 3}
+    m_RewardItemSuggestPrefab: {fileID: 1589396130640849096, guid: 69fdfb3382c8537438d6196da35c5f1d, type: 3}
+    m_RewardItemShufflePrefab: {fileID: 1589396130640849096, guid: 782aa88c40ca2964d951dde42cbddc67, type: 3}
+    m_ContentReward: {fileID: 1958175327281386998}
+    m_Fx1: {fileID: 0}
+    m_Fx2: {fileID: 0}
+    m_Fx3: {fileID: 0}
 --- !u!1 &1958175326990114964
 GameObject:
   m_ObjectHideFlags: 0

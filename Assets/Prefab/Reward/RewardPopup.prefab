@@ -2548,23 +2548,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7c9379e3bfcff544af8065cba00b7c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnClose: {fileID: 2587708990301215360}
-  popup: {fileID: 2587708990368828037}
-  lockGroup: {fileID: 2587708990448373355}
-  objLight: {fileID: 2587708990705640978}
-  txtCollect: {fileID: 2587708989962411391}
-  listDatas: []
-  rewardItem_Coin_Prefab: {fileID: 1491398509847894504, guid: 8f9d87ce5be1c594596f0ec519082f7c,
-    type: 3}
-  rewardItem_Undo_Prefab: {fileID: 1589396130640849096, guid: b3c641c76da5f144f9beec87273beb3b,
-    type: 3}
-  rewardItem_Suggest_Prefab: {fileID: 1589396130640849096, guid: 69fdfb3382c8537438d6196da35c5f1d,
-    type: 3}
-  rewardItem_Shuffle_Prefab: {fileID: 1589396130640849096, guid: 782aa88c40ca2964d951dde42cbddc67,
-    type: 3}
-  contentReward: {fileID: 2587708990379490238}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_RewardPopupFields:
+    m_BtnClose: {fileID: 2587708990301215360}
+    m_Popup: {fileID: 2587708990368828037}
+    m_LockGroup: {fileID: 2587708990448373355}
+    m_ObjLight: {fileID: 2587708990705640978}
+    m_TxtCollect: {fileID: 2587708989962411391}
+    m_ListDatas: []
+    m_RewardItemCoinPrefab: {fileID: 1491398509847894504, guid: 8f9d87ce5be1c594596f0ec519082f7c, type: 3}
+    m_RewardItemUndoPrefab: {fileID: 1589396130640849096, guid: b3c641c76da5f144f9beec87273beb3b, type: 3}
+    m_RewardItemSuggestPrefab: {fileID: 1589396130640849096, guid: 69fdfb3382c8537438d6196da35c5f1d, type: 3}
+    m_RewardItemShufflePrefab: {fileID: 1589396130640849096, guid: 782aa88c40ca2964d951dde42cbddc67, type: 3}
+    m_ContentReward: {fileID: 2587708990379490238}
 --- !u!1 &7127861090177379979
 GameObject:
   m_ObjectHideFlags: 0

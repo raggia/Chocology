@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -7,48 +7,41 @@ using UnityEngine.UI;
 public class ShopPopup : MonoBehaviour
 {
     public static ShopPopup instance;
-
     public GameObject popup;
     public BBUIButton btnClose;
     public BBUIButton btnCoin, btnStore;
-    public CoinGroup coinGroup;
+    public global::Rush.Chocology.Economy.CoinGroup coinGroup;
     public GameObject lockGroup;
-
-
     public ShopIAPGroup shopIAPGroup;
     public ShopItemGroup shopItemGroup;
-
     public Image imageItem, imageIAP;
-
     private void Awake()
     {
         instance = this;
     }
+
     // Start is called before the first frame update
     void Start()
     {
-        PurchaserManager.InitializeSucceeded += PurchaserManager_InitializeSucceeded;
+        global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.InitializeSucceeded += PurchaserManager_InitializeSucceeded;
         btnClose.OnPointerClickCallBack_Completed.AddListener(TouchClose);
         btnCoin.OnPointerClickCallBack_Completed.AddListener(TouchCoin);
         btnStore.OnPointerClickCallBack_Completed.AddListener(TouchStore);
-
         popup.GetComponent<BBUIView>().HideBehavior.onCallback_Completed.AddListener(PopupHideView_Finished);
-
     }
 
     private void OnDestroy()
     {
-        PurchaserManager.InitializeSucceeded -= PurchaserManager_InitializeSucceeded;
+        global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.InitializeSucceeded -= PurchaserManager_InitializeSucceeded;
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
 
-
-    public void TouchClose() {
+    public void TouchClose()
+    {
         lockGroup.gameObject.SetActive(true);
         popup.GetComponent<BBUIView>().HideView();
     }
@@ -63,56 +56,57 @@ public class ShopPopup : MonoBehaviour
         OpenShopIAP();
     }
 
-    public void PopupHideView_Finished() {
+    public void PopupHideView_Finished()
+    {
         gameObject.SetActive(false);
     }
 
-    public void OpenShopPopup(bool isShopIAP) {
+    public void OpenShopPopup(bool isShopIAP)
+    {
         gameObject.SetActive(true);
         InitViews(isShopIAP);
     }
 
-    public void InitViews(bool isShopIAP) {
-        SoundManager.instance.PlaySound_Popup();
+    public void InitViews(bool isShopIAP)
+    {
+        global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundPopup();
         lockGroup.gameObject.SetActive(false);
-
         popup.gameObject.SetActive(false);
         btnClose.gameObject.SetActive(false);
         btnCoin.gameObject.SetActive(false);
         btnStore.gameObject.SetActive(false);
-
         InitViews_ShowView(isShopIAP);
     }
 
-    public void InitViews_ShowView(bool isShopIAP) {
+    public void InitViews_ShowView(bool isShopIAP)
+    {
         Sequence sequenceShowView = DOTween.Sequence();
         sequenceShowView.InsertCallback(0.01f, () =>
         {
             popup.gameObject.SetActive(true);
             popup.GetComponent<BBUIView>().ShowView();
         });
-
         //sequenceShowView.InsertCallback(0.5f, () =>
         //{
         //    btnCoin.gameObject.SetActive(true);
         //    btnCoin.GetComponent<BBUIView>().ShowView();
         //});
-
         sequenceShowView.InsertCallback(0.5f, () =>
         {
-            if (isShopIAP) {
+            if (isShopIAP)
+            {
                 OpenShopIAP();
-            } else{
+            }
+            else
+            {
                 OpenShopItem();
             }
         });
-
         //sequenceShowView.InsertCallback(0.8f, () =>
         //{
         //    btnStore.gameObject.SetActive(true);
         //    btnStore.GetComponent<BBUIView>().ShowView();
         //});
-
         sequenceShowView.InsertCallback(0.8f, () =>
         {
             btnClose.gameObject.SetActive(true);
@@ -120,33 +114,30 @@ public class ShopPopup : MonoBehaviour
         });
     }
 
-
-    public void TouchBuy_ShopItemCoin(ConfigPackData configPackData) {
+    public void TouchBuy_ShopItemCoin(global::Rush.Chocology.Economy.ConfigPackData configPackData)
+    {
         lockGroup.gameObject.SetActive(true);
         //#if UNITY_EDITOR
         //        btnBuy.Interactable = false;
         //        BuyStartPackSuccess();
         //        return;
         //#endif
-
-        PurchaserManager.instance.BuyConsumable(configPackData.idPack, (string _iapID, PurchaserManager.IAP_CALLBACK_STATE _state) =>
+        global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.Instance.BuyConsumable(configPackData.IdPack, (string _iapID, global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.IAP_CALLBACK_STATE _state) =>
         {
-            if (_state == PurchaserManager.IAP_CALLBACK_STATE.SUCCESS)
+            if (_state == global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.IAP_CALLBACK_STATE.SUCCESS)
             {
                 lockGroup.gameObject.SetActive(false);
-                if (_iapID.Equals(Config.IAP_ID.removead.ToString()))
+                if (_iapID.Equals(global::Rush.Chocology.Economy.Config.IAP_ID.removead.ToString()))
                 {
-                    Config.SetRemoveAd();
-                    NotificationPopup.instance.AddNotification("RemoveAd Success!");
-
+                    global::Rush.Chocology.Economy.Config.Runtime.SetRemoveAd();
+                    global::Rush.Chocology.Notifications.NotificationPopup.Instance.AddNotification("RemoveAd Success!");
                     InitIAP();
                 }
-                else if (_iapID.Equals(Config.IAP_ID.removead_and_combo10.ToString()))
+                else if (_iapID.Equals(global::Rush.Chocology.Economy.Config.IAP_ID.removead_and_combo10.ToString()))
                 {
-                    Config.SetRemoveAd();
-                    NotificationPopup.instance.AddNotification("RemoveAd Success!");
+                    global::Rush.Chocology.Economy.Config.Runtime.SetRemoveAd();
+                    global::Rush.Chocology.Notifications.NotificationPopup.Instance.AddNotification("RemoveAd Success!");
                     BuyStartPackSuccess(configPackData);
-
                     InitIAP();
                 }
                 else
@@ -157,53 +148,47 @@ public class ShopPopup : MonoBehaviour
             else
             {
                 lockGroup.gameObject.SetActive(false);
-                NotificationPopup.instance.AddNotification("Buy Fail!");
+                global::Rush.Chocology.Notifications.NotificationPopup.Instance.AddNotification("Buy Fail!");
             }
         });
-
-
     }
 
-    public void BuyStartPackSuccess(ConfigPackData configPackData)
+    public void BuyStartPackSuccess(global::Rush.Chocology.Economy.ConfigPackData configPackData)
     {
-        MenuManager.instance.OpenRewardPopup(configPackData.configItemShopDatas, false);
+        global::Rush.Chocology.LevelMap.MenuManager.Instance.OpenRewardPopup(configPackData.ConfigItemShopDatas, false);
         gameObject.SetActive(false);
     }
 
-
-    public void PurchaserManager_InitializeSucceeded() {
+    public void PurchaserManager_InitializeSucceeded()
+    {
         InitIAP();
     }
 
-    public void InitIAP() {
+    public void InitIAP()
+    {
         shopIAPGroup.InitShopIAP();
     }
 
-
-    public void OpenShopItem(){
+    public void OpenShopItem()
+    {
         Debug.Log("OpenShopItemOpenShopItem");
-
         shopIAPGroup.gameObject.SetActive(false);
         shopItemGroup.gameObject.SetActive(true);
-
         imageItem.gameObject.SetActive(true);
         imageIAP.gameObject.SetActive(false);
-
         btnCoin.gameObject.SetActive(false);
         btnStore.gameObject.SetActive(true);
     }
 
-    public void OpenShopIAP() {
+    public void OpenShopIAP()
+    {
         Debug.Log("OpenShopIAPOpenShopIAP");
         shopIAPGroup.gameObject.SetActive(true);
         shopItemGroup.gameObject.SetActive(false);
-
         imageItem.gameObject.SetActive(false);
         imageIAP.gameObject.SetActive(true);
-
         btnCoin.gameObject.SetActive(true);
         btnStore.gameObject.SetActive(false);
-
         InitIAP();
     }
 }

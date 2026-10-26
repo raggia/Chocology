@@ -762,16 +762,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8f3efcc1c5c4444eb625bac70014a94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnClose: {fileID: 5496280798450121843}
-  popup: {fileID: 5496280800480471263}
-  lockGroup: {fileID: 5496280799410662505}
-  txtCounStar: {fileID: 5496280798782498485}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_LevelPopupFields:
+    m_BtnClose: {fileID: 5496280798450121843}
+    m_Popup: {fileID: 5496280800480471263}
+    m_LockGroup: {fileID: 5496280799410662505}
+    m_TxtCounStar: {fileID: 5496280798782498485}
   scrollRect: {fileID: 5496280798571930739}
   content: {fileID: 5496280800539873918}
-  itemLevelPrefab: {fileID: 5456323577124273913, guid: a20582db2816336409581fa25144aaf3,
-    type: 3}
+  itemLevelPrefab: {fileID: 5456323577124273913, guid: a20582db2816336409581fa25144aaf3, type: 3}
 --- !u!1 &5496280799198959872
 GameObject:
   m_ObjectHideFlags: 0

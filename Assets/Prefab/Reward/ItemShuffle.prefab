@@ -387,10 +387,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c6518cf6caac264b9e1d2f75a1c7d84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtCountItem: {fileID: 1589396132005361699}
-  view: {fileID: 6986008327444231179}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_TxtCountItem: {fileID: 1589396132005361699}
+  m_View: {fileID: 6986008327444231179}
 --- !u!1 &1589396131071503690
 GameObject:
   m_ObjectHideFlags: 0

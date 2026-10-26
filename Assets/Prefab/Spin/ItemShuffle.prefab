@@ -89,9 +89,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 217f94d06557c574589d88c7c1871939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtCountItem: {fileID: 2771750690987121029}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_TxtCountItem: {fileID: 2771750690987121029}
 --- !u!225 &-2589534878099915790
 CanvasGroup:
   m_ObjectHideFlags: 0

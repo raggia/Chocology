@@ -625,9 +625,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e803eadb13af93f4b8748be5c74fe77f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtCoin: {fileID: 4939025419718083409}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_TxtCoin: {fileID: 4939025419718083409}
 --- !u!225 &4939025417959038975
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2051,66 +2051,71 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66c8d82514bd0f84a86cda59fdf67a97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnClose: {fileID: 4939025418335133430}
-  btnWatchAds: {fileID: 4939025418838692711}
-  btnCoin: {fileID: 4939025417899329697}
-  popup: {fileID: 4939025418872825803}
-  lockGroup: {fileID: 4939025419056302927}
-  spinObj: {fileID: 4939025418490756105}
-  listDatas:
-  - shopItemType: 1
-    countItem: 1
-    price: 0
-  - shopItemType: 0
-    countItem: 100
-    price: 0
-  - shopItemType: 2
-    countItem: 2
-    price: 0
-  - shopItemType: 2
-    countItem: 1
-    price: 0
-  - shopItemType: 0
-    countItem: 200
-    price: 0
-  - shopItemType: 1
-    countItem: 2
-    price: 0
-  - shopItemType: 3
-    countItem: 1
-    price: 0
-  - shopItemType: 3
-    countItem: 2
-    price: 0
-  listPercents:
-  - 20
-  - 20
-  - 20
-  - 20
-  - 10
-  - 10
-  - 10
-  - 10
-  listSpinDatas: []
-  spinItem_Coin_Prefab: {fileID: -6805923807876262398, guid: b3bb2b9198590cd4db6f7f22d191494a,
-    type: 3}
-  spinItem_Undo_Prefab: {fileID: 147277369782860, guid: 84f65dbd705e6c046a05ec17539b1fad,
-    type: 3}
-  spinItem_Suggest_Prefab: {fileID: 3192351120883817830, guid: 7f58084e18d64d44cb65fbe9ee0128cd,
-    type: 3}
-  spinItem_Shuffle_Prefab: {fileID: 2771750689434190773, guid: ea6771e0040d2f34d931d7733e562346,
-    type: 3}
-  listItemsPos:
-  - {fileID: 4939025419436501094}
-  - {fileID: 4939025419091000953}
-  - {fileID: 4939025419412889581}
-  - {fileID: 4939025419174859708}
-  - {fileID: 4939025418817075781}
-  - {fileID: 4939025418274664635}
-  - {fileID: 4939025418682681249}
-  - {fileID: 4939025418849926032}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_SpinPopupFields:
+    m_BtnClose: {fileID: 4939025418335133430}
+    m_BtnWatchAds: {fileID: 4939025418838692711}
+    m_BtnCoin: {fileID: 4939025417899329697}
+    m_Popup: {fileID: 4939025418872825803}
+    m_LockGroup: {fileID: 4939025419056302927}
+    m_SpinObj: {fileID: 4939025418490756105}
+    m_ListDatas:
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 1
+        m_CountItem: 1
+        m_Price: 0
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 0
+        m_CountItem: 100
+        m_Price: 0
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 2
+        m_CountItem: 2
+        m_Price: 0
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 2
+        m_CountItem: 1
+        m_Price: 0
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 0
+        m_CountItem: 200
+        m_Price: 0
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 1
+        m_CountItem: 2
+        m_Price: 0
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 3
+        m_CountItem: 1
+        m_Price: 0
+    - m_ConfigItemShopDataFields:
+        m_ShopItemType: 3
+        m_CountItem: 2
+        m_Price: 0
+    m_ListPercents:
+    - 20
+    - 20
+    - 20
+    - 20
+    - 10
+    - 10
+    - 10
+    - 10
+    m_ListSpinDatas: []
+    m_SpinItemCoinPrefab: {fileID: -6805923807876262398, guid: b3bb2b9198590cd4db6f7f22d191494a, type: 3}
+    m_SpinItemUndoPrefab: {fileID: 147277369782860, guid: 84f65dbd705e6c046a05ec17539b1fad, type: 3}
+    m_SpinItemSuggestPrefab: {fileID: 3192351120883817830, guid: 7f58084e18d64d44cb65fbe9ee0128cd, type: 3}
+    m_SpinItemShufflePrefab: {fileID: 2771750689434190773, guid: ea6771e0040d2f34d931d7733e562346, type: 3}
+    m_ListItemsPos:
+    - {fileID: 4939025419436501094}
+    - {fileID: 4939025419091000953}
+    - {fileID: 4939025419412889581}
+    - {fileID: 4939025419174859708}
+    - {fileID: 4939025418817075781}
+    - {fileID: 4939025418274664635}
+    - {fileID: 4939025418682681249}
+    - {fileID: 4939025418849926032}
 --- !u!1 &4939025418377390839
 GameObject:
   m_ObjectHideFlags: 0

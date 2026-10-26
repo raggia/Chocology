@@ -469,7 +469,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48e71a1c1a5c898488e4964be208a6f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnRemoveAd: {fileID: 8191889836704233270}
-  lockGroup: {fileID: 0}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_BtnRemoveAd: {fileID: 8191889836704233270}
+  m_LockGroup: {fileID: 0}

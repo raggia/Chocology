@@ -6,7 +6,6 @@ using DG.Tweening;
 public class GDPRPopup : MonoBehaviour
 {
     public static GDPRPopup instance;
-
     [Header("Popup")]
     public GameObject popup;
     public BBUIButton btnClose;
@@ -18,14 +17,12 @@ public class GDPRPopup : MonoBehaviour
     {
         btnClose.OnPointerClickCallBack_Completed.AddListener(TouchClose);
         btnLike.OnPointerClickCallBack_Completed.AddListener(TouchLike);
-
         popup.GetComponent<BBUIView>().HideBehavior.onCallback_Completed.AddListener(PopupHideView_Finished);
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
 
     public void OpenRatePopup()
@@ -37,7 +34,6 @@ public class GDPRPopup : MonoBehaviour
     private void InitViews()
     {
         lockGroup.gameObject.SetActive(false);
-
         popup.gameObject.SetActive(false);
         btnClose.gameObject.SetActive(false);
         btnLike.gameObject.SetActive(false);
@@ -53,13 +49,11 @@ public class GDPRPopup : MonoBehaviour
             popup.gameObject.SetActive(true);
             popup.GetComponent<BBUIView>().ShowView();
         });
-
         sequenceShowView.InsertCallback(0.4f, () =>
         {
             btnClose.gameObject.SetActive(true);
             btnClose.GetComponent<BBUIView>().ShowView();
         });
-
         sequenceShowView.InsertCallback(0.5f, () =>
         {
             btnLike.gameObject.SetActive(true);
@@ -75,11 +69,9 @@ public class GDPRPopup : MonoBehaviour
 
     public void TouchLike()
     {
-        Config.SetRate();
+        global::Rush.Chocology.Economy.Config.Runtime.SetRate();
 #if UNITY_ANDROID
-
         //Application.OpenURL(rateLinkAndorid);
-
 #else
       //  Application.OpenURL(rateLinkIOS);
 #endif

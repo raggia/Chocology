@@ -511,7 +511,7 @@ MonoBehaviour:
     - platform: 0
       enabled: 1
       appId:
-        id: 19e606f05
+        id: 1d84505e5
         displayName: App Key
         notRequired: 0
       idBanner:
@@ -528,7 +528,7 @@ MonoBehaviour:
         notRequired: 0
       hasBanner: 0
       hasInterstitial: 1
-      hasRewarded: 0
+      hasRewarded: 1
       directedForChildren: 0
     - platform: 1
       enabled: 1
