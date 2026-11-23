@@ -6,16 +6,17 @@ using TMPro;
 using System;
 using UnityEngine.SocialPlatforms.Impl;
 using CloudOnce;
-using GoogleMobileAds.Api;
 
 namespace Rush.Chocology.Integrations.Cloud
 {
     [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "", "Assembly-CSharp", "Authentication")]
     public class Authentication : MonoBehaviour
     {
+        private const int c_TargetFrameRate = 60;
+
         private void Start()
         {
-            Application.targetFrameRate = 1000;
+            Application.targetFrameRate = c_TargetFrameRate;
             QualitySettings.vSyncCount = 0;
             global::CloudOnce.Cloud.OnInitializeComplete += OnCloudeInitComplete;
             global::CloudOnce.Cloud.Initialize(false, true, false);
@@ -25,7 +26,12 @@ namespace Rush.Chocology.Integrations.Cloud
         {
             global::CloudOnce.Cloud.OnInitializeComplete -= OnCloudeInitComplete;
             Debug.Log("Initialized");
-            Debug.Log("Signin as : " + global::CloudOnce.Cloud.PlayerDisplayName);
+
+        }
+
+        private void OnDestroy()
+        {
+            global::CloudOnce.Cloud.OnInitializeComplete -= OnCloudeInitComplete;
         }
 
         private void CloudOnCloudSaveComplete(bool arg0)

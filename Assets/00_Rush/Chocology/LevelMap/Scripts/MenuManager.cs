@@ -248,6 +248,8 @@ namespace Rush.Chocology.LevelMap
         public void TouchParty() => TouchPartyInternal();
         private void TouchPartyInternal()
         {
+            if (!Debug.isDebugBuild)
+                return;
             m_CountHack++;
             if (m_CountHack == 10)
             {
@@ -287,7 +289,7 @@ namespace Rush.Chocology.LevelMap
         public void InitViewsShowView() => InitViewsShowViewInternal();
         private void InitViewsShowViewInternal()
         {
-            Sequence sequenceShowView = DOTween.Sequence();
+            Sequence sequenceShowView = DOTween.Sequence().SetLink(gameObject);
             sequenceShowView.InsertCallback(0.1f, () =>
             {
                 global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundShowView();
@@ -363,7 +365,7 @@ namespace Rush.Chocology.LevelMap
                 // sequence.Insert(2f,btnGift.transform.DOPunchScale(new Vector3(0.1f, 0.1f,0.1f), 1f, 2, 1).SetEase(Ease.OutQuart));
                 // //sequence.Insert(2f,btnGift.gameObject.GetComponent<RectTransform>().DOAnchorPosY(-10f, 1f).SetRelative(true).SetEase(Ease.Linear));
                 // sequence.SetLoops(-1, LoopType.Yoyo);
-                m_MenuManagerFields.Logo.gameObject).DOAnchorPosY(-30f, 1f).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+                m_MenuManagerFields.Logo.gameObject).DOAnchorPosY(-30f, 1f).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo).SetLink(m_MenuManagerFields.Logo.gameObject);
             });
         }
 

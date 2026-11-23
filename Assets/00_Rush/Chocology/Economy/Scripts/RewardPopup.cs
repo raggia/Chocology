@@ -111,10 +111,18 @@ namespace Rush.Chocology.Economy
         }
 
         private bool m_IsShowCollectx2 = true;
+        private bool m_RewardCollected;
+        private bool m_BonusCollected;
+        private Sequence m_RevealSequence;
         public void OpenRewardPopup(List<global::Rush.Chocology.Economy.ConfigItemShopData> _listDatas, bool _isShowCollectx2 = true) => OpenRewardPopupInternal(_listDatas, _isShowCollectx2);
         private void OpenRewardPopupInternal(List<global::Rush.Chocology.Economy.ConfigItemShopData> _listDatas, bool _isShowCollectx2 = true)
         {
-            m_RewardPopupFields.ListDatas = _listDatas;
+            m_RewardPopupFields.ListDatas = new List<global::Rush.Chocology.Economy.ConfigItemShopData>(_listDatas);
+            m_RewardCollected = false;
+            m_BonusCollected = false;
+            // Persist rewards before showing their animation, including paid rewards.
+            foreach (var item in m_RewardPopupFields.ListDatas)
+                global::Rush.Chocology.Economy.Config.Runtime.BuySuccesItemShop(item);
             gameObject.SetActive(true);
             m_IsShowCollectx2 = _isShowCollectx2;
             InitViewsInternal();
@@ -123,11 +131,11 @@ namespace Rush.Chocology.Economy
         public void TouchClose() => TouchCloseInternal();
         private void TouchCloseInternal()
         {
+            if (m_RewardCollected)
+                return;
+            m_RewardCollected = true;
+            m_RevealSequence?.Kill();
             global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundCash();
-            for (int i = 0; i < m_RewardPopupFields.ListDatas.Count; i++)
-            {
-                global::Rush.Chocology.Economy.Config.Runtime.BuySuccesItemShop(m_RewardPopupFields.ListDatas[i]);
-            }
 
             m_RewardPopupFields.LockGroup.gameObject.SetActive(true);
             if (global::Rush.Chocology.Gameplay.GamePlayManager.Instance != null)
@@ -167,12 +175,13 @@ namespace Rush.Chocology.Economy
         public void WatchAdsFinished() => WatchAdsFinishedInternal();
         private void WatchAdsFinishedInternal()
         {
+            if (m_RewardCollected || m_BonusCollected)
+                return;
+            m_BonusCollected = true;
+            m_RewardCollected = true;
             global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundCash();
-            for (int i = 0; i < m_RewardPopupFields.ListDatas.Count; i++)
-            {
-                m_RewardPopupFields.ListDatas[i].CountItem = m_RewardPopupFields.ListDatas[i].CountItem * 2;
-                global::Rush.Chocology.Economy.Config.Runtime.BuySuccesItemShop(m_RewardPopupFields.ListDatas[i]);
-            }
+            foreach (var item in m_RewardPopupFields.ListDatas)
+                global::Rush.Chocology.Economy.Config.Runtime.BuySuccesItemShop(item);
 
             m_RewardPopupFields.LockGroup.gameObject.SetActive(true);
             global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_RewardPopupFields.Popup).HideView();
@@ -247,7 +256,9 @@ namespace Rush.Chocology.Economy
         public void InitViewShowView() => InitViewShowViewInternal();
         private void InitViewShowViewInternal()
         {
-            Sequence sequenceShowView = DOTween.Sequence();
+            m_RevealSequence?.Kill();
+            Sequence sequenceShowView = DOTween.Sequence().SetLink(gameObject);
+            m_RevealSequence = sequenceShowView;
             sequenceShowView.InsertCallback(0.1f, () =>
             {
                 m_RewardPopupFields.Popup.gameObject.SetActive(true);
@@ -276,7 +287,7 @@ namespace Rush.Chocology.Economy
             // });
             sequenceShowView.InsertCallback(1f, () =>
             {
-                m_RewardPopupFields.BtnClose.gameObject.SetActive(false);
+                m_RewardPopupFields.BtnClose.gameObject.SetActive(true);
                 global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_RewardPopupFields.BtnClose.gameObject).ShowView();
             });
         }
@@ -296,10 +307,17 @@ namespace Rush.Chocology.Economy
             gameObject.SetActive(false);
         }
 
+        private void OnDisable()
+        {
+            m_RevealSequence?.Kill();
+            if (m_RewardPopupFields.ObjLight != null)
+                m_RewardPopupFields.ObjLight.transform.DOKill();
+        }
+
         private void SetRotateLight()
         {
             //Debug.Log("SetRotateLightSetRotateLight");
-            m_RewardPopupFields.ObjLight.transform.DORotate(new Vector3(0f, 0f, -90f), 1f).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+            m_RewardPopupFields.ObjLight.transform.DORotate(new Vector3(0f, 0f, -90f), 1f).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental).SetLink(m_RewardPopupFields.ObjLight);
         }
     }
 }

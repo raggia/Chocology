@@ -636,15 +636,30 @@ namespace Rush.Chocology.Gameplay
                 SetFinishedGame();
                 global::Rush.Chocology.Economy.Config.Runtime.GameState = global::Rush.Chocology.Economy.Config.GAME_STATE.WIN;
                 m_GamePlayManagerFields.WinPopup.ShowWinPopup(m_GamePlayManagerFields.Level, m_GamePlayManagerFields.StarGroup.CurrStar, global::Rush.Chocology.Gameplay.GameLevelManager.Instance.ConfigLevelGame.ListRewardsCoinValue[m_GamePlayManagerFields.StarGroup.CurrStar]);
-                global::Rush.Chocology.Economy.Config.Runtime.SetCurrLevel(m_GamePlayManagerFields.Level + 1);
+                int unlockedLevel = m_GamePlayManagerFields.Level + c_NextLevelOffset;
+                bool isNewLevelUnlocked = unlockedLevel > global::Rush.Chocology.Economy.Config.Runtime.CurrLevel;
+                global::Rush.Chocology.Economy.Config.Runtime.SetCurrLevel(unlockedLevel);
                 global::Rush.Chocology.Economy.Config.Runtime.CurrSelectLevel = global::Rush.Chocology.Economy.Config.Runtime.CurrLevel;
-                if (m_GamePlayManagerFields.Level >= 15 && m_GamePlayManagerFields.Level % 5 == 0 && !global::Rush.Chocology.Economy.Config.Runtime.Rate)
+                if (isNewLevelUnlocked && unlockedLevel == c_InAppReviewUnlockLevel)
                 {
-                    OpenRatePopupInternal();
+                    StartCoroutine(RequestInAppReview());
                 }
 
                 global::Rush.Chocology.Notifications.GlobalVar.Runtime.CallAnalytics("end_game");
             }
+        }
+
+        // Google Play in-app review is requested once, when this level is unlocked for the first time.
+        private const int c_InAppReviewUnlockLevel = 5;
+        private const int c_NextLevelOffset = 1;
+        // Lets the win popup settle before the review sheet slides in.
+        private const float c_InAppReviewDelaySeconds = 1f;
+
+        private IEnumerator RequestInAppReview()
+        {
+            yield return new WaitForSecondsRealtime(c_InAppReviewDelaySeconds);
+            // No fallback here: an automatic prompt must not throw the player out to the Play Store.
+            yield return new global::Rush.Chocology.Integrations.Review.InAppReviewRequest().Launch(null);
         }
 
         public void SetNextGame() => SetNextGameInternal();

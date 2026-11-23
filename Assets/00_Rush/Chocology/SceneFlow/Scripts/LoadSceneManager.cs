@@ -58,7 +58,7 @@ namespace Rush.Chocology.SceneFlow
         {
             if (!m_IsLoadMenu)
             {
-                //isLoadMenu = true;
+                m_IsLoadMenu = true;
                 if (global::Rush.Chocology.Economy.Config.Runtime.CurrLevel == 1)
                 {
                     SceneManager.LoadSceneAsync("Play");

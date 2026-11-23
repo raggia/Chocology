@@ -78,6 +78,7 @@ namespace Rush.Chocology.AppUpdate
         [global::UnityEngine.SerializeField]
         private NewUpdatePopUpUiField m_NewUpdatePopUpUiFields = new NewUpdatePopUpUiField();
         private static bool s_IsAlreadyCheckedForUpdates = false;
+        private const int c_RequestTimeoutSeconds = 10;
         private global::Rush.Chocology.AppUpdate.GameVersionData m_LatestGameVersion;
         // Start is called before the first frame update
         void Start()
@@ -92,42 +93,54 @@ namespace Rush.Chocology.AppUpdate
 
         IEnumerator CheckforUpdate()
         {
-            UnityWebRequest request;
-#if UNITY_EDITOR || UNITY_ANDROID
-            request = UnityWebRequest.Get(m_NewUpdatePopUpUiFields.AndroidJsonDataURL);
-#elif UNITY_IOS
-        request = UnityWebRequest.Get(iosJsonDataURL);
+#if UNITY_IOS && !UNITY_EDITOR
+            string url = m_NewUpdatePopUpUiFields.IosJsonDataURL;
+#else
+            string url = m_NewUpdatePopUpUiFields.AndroidJsonDataURL;
 #endif
-            request.chunkedTransfer = false;
-            request.disposeDownloadHandlerOnDispose = true;
-            request.timeout = 60;
-            Debug.Log("[Request] Try to request");
-            yield return request.Send();
-            if (request.isDone)
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var endpoint) || endpoint.Scheme != Uri.UriSchemeHttps)
+                yield break;
+            using (var request = UnityWebRequest.Get(url))
             {
+                request.timeout = c_RequestTimeoutSeconds;
+                yield return request.SendWebRequest();
                 s_IsAlreadyCheckedForUpdates = true;
-                Debug.Log("[Request] Done");
-                Debug.Log($"[Request] result : {(request.isNetworkError)}, {(request.isHttpError)}, {(request.isNetworkError)} ");
-                if (!request.isNetworkError)
+                if (request.result != UnityWebRequest.Result.Success)
+                    yield break;
+                GameVersionData latest;
+                try
                 {
-                    Debug.Log($"[Request] Succes with : {(request.downloadHandler.text)}");
-                    m_LatestGameVersion = Newtonsoft.Json.JsonConvert.DeserializeObject<global::Rush.Chocology.AppUpdate.GameVersionData>(request.downloadHandler.text);
-                    if (!string.IsNullOrEmpty(m_LatestGameVersion.Version) && !Application.version.Equals(m_LatestGameVersion.Version))
-                    {
-                        m_NewUpdatePopUpUiFields.UiDescription.text = m_LatestGameVersion.Description;
-                        Debug.Log($"[Request] Ui Description : {(m_NewUpdatePopUpUiFields.UiDescription.text)}");
-                        Debug.Log($"[Request] Description : {(m_LatestGameVersion.Description)}");
-                        ShowPopUp();
-                    }
-
-                    if (!string.IsNullOrEmpty(m_LatestGameVersion.Version) && Application.version.Equals(m_LatestGameVersion.Version))
-                    {
-                        HidePopUp();
-                    }
+                    latest = Newtonsoft.Json.JsonConvert.DeserializeObject<GameVersionData>(request.downloadHandler.text);
                 }
+                catch (Newtonsoft.Json.JsonException)
+                {
+                    Debug.LogWarning("Update information is temporarily unavailable.", this);
+                    yield break;
+                }
+                if (!HasNewerVersion(Application.version, latest.Version))
+                    yield break;
+                // Only offer the official store destination for this app.
+#if UNITY_IOS && !UNITY_EDITOR
+                if (!Uri.TryCreate(latest.Url, UriKind.Absolute, out var store) || store.Scheme != Uri.UriSchemeHttps || store.Host != "apps.apple.com")
+                    yield break;
+#else
+                if (!Uri.TryCreate(latest.Url, UriKind.Absolute, out var store) || store.Scheme != Uri.UriSchemeHttps || store.Host != "play.google.com" || store.AbsolutePath != "/store/apps/details" || store.Query != "?id=" + Application.identifier)
+                    yield break;
+#endif
+                m_LatestGameVersion = latest;
+                m_NewUpdatePopUpUiFields.UiDescription.text = latest.Description;
+                ShowPopUp();
             }
+        }
 
-            request.Dispose();
+        internal static bool HasNewerVersion(string current, string latest)
+        {
+            if (!Version.TryParse(current != null && !current.Contains(".") ? current + ".0" : current, out var installed) || !Version.TryParse(latest != null && !latest.Contains(".") ? latest + ".0" : latest, out var available))
+                return false;
+            // Normalize omitted minor/build/revision numbers (2, 2.0, 2.0.0).
+            var normalizedInstalled = new Version(installed.Major, Math.Max(0, installed.Minor), Math.Max(0, installed.Build), Math.Max(0, installed.Revision));
+            var normalizedAvailable = new Version(available.Major, Math.Max(0, available.Minor), Math.Max(0, available.Build), Math.Max(0, available.Revision));
+            return normalizedAvailable > normalizedInstalled;
         }
 
         void ShowPopUp()

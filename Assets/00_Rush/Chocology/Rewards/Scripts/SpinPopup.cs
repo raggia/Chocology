@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UI;
-using bonbon;
-using BsplabsMobileAds;
 using System;
 using Random = UnityEngine.Random;
 
@@ -106,38 +102,88 @@ namespace Rush.Chocology.Rewards
         public global::Rush.Chocology.Rewards.SpinItem SpinItemShufflePrefab { get => m_SpinPopupFields.SpinItemShufflePrefab; set => m_SpinPopupFields.SpinItemShufflePrefab = value; }
         public global::System.Collections.Generic.List<global::UnityEngine.Transform> ListItemsPos { get => m_SpinPopupFields.ListItemsPos; set => m_SpinPopupFields.ListItemsPos = value; }
 
-        private void Awake()
+        private const float c_FullTurn = 360f;
+        private const int c_SpinTurns = 4;
+        private const float c_SpinDuration = 5f;
+        private const float c_PopupRevealDelay = 0.1f;
+        private const float c_FirstItemRevealDelay = 0.5f;
+        private const float c_ItemRevealInterval = 0.1f;
+        private const float c_FirstButtonRevealDelay = 1.5f;
+        private const float c_ButtonRevealInterval = 0.2f;
+        private const float c_CloseRevealDelay = 2f;
+        private const float c_ButtonRefreshInterval = 0.5f;
+
+        private Sequence m_RevealSequence;
+        private Tween m_SpinTween;
+        private int m_IndexResult;
+        private int m_RotateSoundIndex;
+        private int m_PaidSpinCost;
+        private bool m_IsSpin;
+        private bool m_AdPending;
+        private bool m_IsClosing;
+        private bool m_ControlsReady;
+        private bool m_IsFreeSpin;
+        private float m_NextButtonRefresh;
+
+        private bool CanStartSpin => isActiveAndEnabled && m_ControlsReady &&
+            !m_IsClosing && !m_IsSpin && !m_AdPending && WheelConfigurationValid;
+
+        private bool WheelConfigurationValid
         {
-            s_Instance = this;
+            get
+            {
+                int count = m_SpinPopupFields.ListItemsPos.Count;
+                if (count == 0 || count != m_SpinPopupFields.ListDatas.Count ||
+                    count != m_SpinPopupFields.ListPercents.Count || m_SpinPopupFields.SpinObj == null)
+                    return false;
+                float total = 0f;
+                for (int i = 0; i < count; i++)
+                {
+                    float weight = m_SpinPopupFields.ListPercents[i];
+                    if (m_SpinPopupFields.ListItemsPos[i] == null || weight < 0f ||
+                        float.IsNaN(weight) || float.IsInfinity(weight))
+                        return false;
+                    total += weight;
+                }
+                return total > 0f && !float.IsInfinity(total);
+            }
         }
 
-        // Start is called before the first frame update
-        void Start()
+        private void Awake() => s_Instance = this;
+
+        private void Start()
         {
             m_SpinPopupFields.BtnClose.OnPointerClickCallBack_Completed.AddListener(TouchCloseInternal);
             m_SpinPopupFields.BtnWatchAds.OnPointerClickCallBack_Completed.AddListener(TouchWatchAdsInternal);
-            m_SpinPopupFields.BtnCoin.OnPointerClickCallBack_Completed.AddListener(TouchSpinCoin);
-            global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.Popup).HideBehavior.onCallback_Completed.AddListener(HidePopupFinishedInternal);
+            m_SpinPopupFields.BtnCoin.OnPointerClickCallBack_Completed.AddListener(TouchSpinCoinInternal);
+            global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.Popup)
+                .HideBehavior.onCallback_Completed.AddListener(HidePopupFinishedInternal);
         }
 
-        private // Update is called once per frame
-        int m_RotateSoundIndex = 0;
-        void Update()
+        private void Update()
         {
             if (m_IsSpin)
             {
-                int spinIndex = Mathf.FloorToInt(global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::UnityEngine.RectTransform>(m_SpinPopupFields.SpinObj).eulerAngles.z / 45f);
-                if (m_RotateSoundIndex != spinIndex)
+                float sectorAngle = c_FullTurn / m_SpinPopupFields.ListItemsPos.Count;
+                int index = Mathf.FloorToInt(m_SpinPopupFields.SpinObj.transform.localEulerAngles.z / sectorAngle);
+                if (index != m_RotateSoundIndex)
                 {
-                    m_RotateSoundIndex = spinIndex;
+                    m_RotateSoundIndex = index;
                     global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundSpin();
                 }
+            }
+            if (m_ControlsReady && Time.unscaledTime >= m_NextButtonRefresh)
+            {
+                m_NextButtonRefresh = Time.unscaledTime + c_ButtonRefreshInterval;
+                RefreshButtonsInternal();
             }
         }
 
         public void OpenSpinPopup() => OpenSpinPopupInternal();
         private void OpenSpinPopupInternal()
         {
+            if (m_IsSpin || m_AdPending || m_IsClosing)
+                return;
             gameObject.SetActive(true);
             InitViewsInternal();
         }
@@ -145,74 +191,132 @@ namespace Rush.Chocology.Rewards
         public void TouchClose() => TouchCloseInternal();
         private void TouchCloseInternal()
         {
-            m_SpinPopupFields.LockGroup.gameObject.SetActive(true);
+            if (m_IsSpin || m_AdPending || m_IsClosing)
+                return;
+            m_IsClosing = true;
+            m_ControlsReady = false;
+            m_RevealSequence?.Kill();
+            m_SpinPopupFields.LockGroup.SetActive(true);
             global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.Popup).HideView();
         }
 
-        private void TouchSpinCoin()
+        private void TouchSpinCoinInternal()
         {
-            if (global::Rush.Chocology.Economy.Config.Runtime.CurrCoin >= global::Rush.Chocology.Economy.Config.Runtime.SpinPrice)
-            {
-                global::Rush.Chocology.Economy.Config.Runtime.SetCoin(global::Rush.Chocology.Economy.Config.Runtime.CurrCoin - global::Rush.Chocology.Economy.Config.Runtime.SpinPrice);
-                WatchAdsFinishedInternal();
-            }
-            else
+            if (!CanStartSpin)
+                return;
+            var config = global::Rush.Chocology.Economy.Config.Runtime;
+            if (config.CurrCoin < config.SpinPrice)
             {
                 global::Rush.Chocology.Notifications.NotificationPopup.Instance.AddNotification("Not enough Coin!");
-                //GamePlayManager.instance.OpenShopPopup();
                 global::Rush.Chocology.LevelMap.MenuManager.Instance.OpenShopCoin();
+                return;
             }
+            StartSpinInternal(false);
         }
 
         public void TouchWatchAds() => TouchWatchAdsInternal();
         private void TouchWatchAdsInternal()
         {
-            m_SpinPopupFields.BtnWatchAds.Interactable = false;
-            m_SpinPopupFields.LockGroup.gameObject.SetActive(true);
+            if (!CanStartSpin || global::Rush.Chocology.Economy.Config.Runtime.SpinCooldownRemaining > 0)
+                return;
+            m_AdPending = true;
+            RefreshButtonsInternal();
             new global::Rush.Integrations.Ads.RewardedAdRequest().Show(CompleteMethod);
         }
 
         private void CompleteMethod(bool completed)
         {
-            if (completed == true)
-            {
-                m_SpinPopupFields.LockGroup.gameObject.SetActive(false);
-                //WatchAds
+            if (!m_AdPending)
+                return;
+            m_AdPending = false;
+            if (!isActiveAndEnabled || m_IsClosing)
+                return;
+            if (completed)
                 WatchAdsFinishedInternal();
-                global::Rush.Chocology.Integrations.Analytics.AdjustManager.instance.LuckySpinClaimed();
-                global::Rush.Chocology.Notifications.GlobalVar.Runtime.CreateSpinClaimNotification(global::Rush.Chocology.Notifications.TimerFromServer.Instance.DateTimeNowOnServer.AddSeconds(global::Rush.Chocology.Economy.Config.TIME_SPIN));
-                Debug.Log("Message Will appear in : " + global::Rush.Chocology.Economy.Config.TIME_SPIN + "h");
-            }
             else
-            {
-                m_SpinPopupFields.LockGroup.gameObject.SetActive(false);
-            }
+                RefreshButtonsInternal();
         }
 
-        private int m_IndexResult;
-        private bool m_IsSpin = false;
         public void WatchAdsFinished() => WatchAdsFinishedInternal();
         private void WatchAdsFinishedInternal()
         {
-            //Spin
-            m_IndexResult = RandomExtension.RandomPercentage(m_SpinPopupFields.ListPercents.ToArray());
-            //indexResult = 1;
-            if (m_IndexResult == 8)
-                m_IndexResult = 0;
-            Debug.Log("indexResult" + m_IndexResult);
-            m_SpinPopupFields.LockGroup.gameObject.SetActive(true);
+            if (!CanStartSpin || global::Rush.Chocology.Economy.Config.Runtime.SpinCooldownRemaining > 0)
+                return;
+            StartSpinInternal(true);
+        }
+
+        private void StartSpinInternal(bool freeSpin)
+        {
+            if (!CanStartSpin || m_SpinPopupFields.ListSpinDatas.Count != m_SpinPopupFields.ListItemsPos.Count)
+                return;
+            SetSpinResultInternal();
             m_IsSpin = true;
-            m_SpinPopupFields.SpinObj.transform.DORotate(new Vector3(0f, 0f, -4 * 360 - (8 - m_IndexResult) * 45), 5f).SetEase(Ease.InOutExpo).OnComplete(() =>
-            {
-                m_IsSpin = false;
-                m_SpinPopupFields.LockGroup.gameObject.SetActive(false);
-                Debug.Log(m_SpinPopupFields.ListSpinDatas[m_IndexResult].ShopItemType);
-                Debug.Log(m_SpinPopupFields.ListSpinDatas[m_IndexResult].CountItem);
-                global::Rush.Chocology.Economy.Config.Runtime.SetSpinLastTime();
-                global::Rush.Chocology.LevelMap.MenuManager.Instance.OpenRewardPopup(new List<global::Rush.Chocology.Economy.ConfigItemShopData>() { m_SpinPopupFields.ListSpinDatas[m_IndexResult] });
-            //GamePlayManager.instance.OpenRewardPopup(new List<ConfigItemShopData>() { listSpinDatas[indexResult] });
-            });
+            m_IsFreeSpin = freeSpin;
+            var config = global::Rush.Chocology.Economy.Config.Runtime;
+            m_PaidSpinCost = freeSpin ? 0 : config.SpinPrice;
+            if (m_PaidSpinCost > 0)
+                config.SetCoin(config.CurrCoin - m_PaidSpinCost);
+            RefreshButtonsInternal();
+
+            // Explicit multi-turn local rotation: the default Fast mode discards full revolutions.
+            float sectorAngle = c_FullTurn / m_SpinPopupFields.ListItemsPos.Count;
+            float start = m_SpinPopupFields.SpinObj.transform.localEulerAngles.z;
+            float target = m_IndexResult * sectorAngle;
+            float end = start - c_SpinTurns * c_FullTurn - Mathf.Repeat(start - target, c_FullTurn);
+            m_SpinTween = m_SpinPopupFields.SpinObj.transform
+                .DOLocalRotate(new Vector3(0f, 0f, end), c_SpinDuration, RotateMode.FastBeyond360)
+                .SetEase(Ease.InOutExpo).SetUpdate(true).SetLink(gameObject)
+                .OnComplete(CompleteSpinInternal);
             global::Rush.Chocology.Notifications.GlobalVar.Runtime.CallAnalytics("play_spin");
+        }
+
+        private void SetSpinResultInternal()
+        {
+            float total = 0f;
+            foreach (float weight in m_SpinPopupFields.ListPercents)
+                total += weight;
+            float sample = Random.Range(0f, total);
+            m_IndexResult = 0;
+            for (int i = 0; i < m_SpinPopupFields.ListPercents.Count; i++)
+            {
+                float weight = m_SpinPopupFields.ListPercents[i];
+                if (weight <= 0f)
+                    continue;
+                m_IndexResult = i;
+                if (sample < weight)
+                    return;
+                sample -= weight;
+            }
+        }
+
+        private void CompleteSpinInternal()
+        {
+            if (!m_IsSpin)
+                return;
+            m_IsSpin = false;
+            m_PaidSpinCost = 0;
+            m_SpinTween = null;
+            if (m_IsFreeSpin)
+            {
+                var config = global::Rush.Chocology.Economy.Config.Runtime;
+                config.SetSpinLastTime();
+                global::Rush.Chocology.Integrations.Analytics.AdjustManager.instance.LuckySpinClaimed();
+                global::Rush.Chocology.Notifications.GlobalVar.Runtime.CreateSpinClaimNotification(
+                    config.SpinTimeUtc.AddSeconds(global::Rush.Chocology.Economy.Config.TIME_SPIN).ToLocalTime());
+            }
+            RefreshButtonsInternal();
+            global::Rush.Chocology.LevelMap.MenuManager.Instance.OpenRewardPopup(
+                new List<global::Rush.Chocology.Economy.ConfigItemShopData> { m_SpinPopupFields.ListSpinDatas[m_IndexResult] });
+        }
+
+        private void RefreshButtonsInternal()
+        {
+            bool busy = m_IsSpin || m_AdPending || m_IsClosing;
+            m_SpinPopupFields.LockGroup.SetActive(busy);
+            m_SpinPopupFields.BtnClose.Interactable = !busy;
+            m_SpinPopupFields.BtnCoin.Interactable = !busy && m_ControlsReady && WheelConfigurationValid;
+            m_SpinPopupFields.BtnWatchAds.Interactable = !busy && m_ControlsReady && WheelConfigurationValid &&
+                global::Rush.Chocology.Economy.Config.Runtime.SpinCooldownRemaining == 0;
         }
 
         public void HidePopupFinished() => HidePopupFinishedInternal();
@@ -225,28 +329,19 @@ namespace Rush.Chocology.Rewards
         public void InitViews() => InitViewsInternal();
         private void InitViewsInternal()
         {
+            if (m_IsSpin || m_AdPending)
+                return;
+            m_RevealSequence?.Kill();
+            m_IsClosing = false;
+            m_ControlsReady = false;
             global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundPopup();
-            m_SpinPopupFields.LockGroup.gameObject.SetActive(false);
-            m_SpinPopupFields.Popup.gameObject.SetActive(false);
+            m_SpinPopupFields.LockGroup.SetActive(false);
+            m_SpinPopupFields.Popup.SetActive(false);
             m_SpinPopupFields.BtnWatchAds.gameObject.SetActive(false);
             m_SpinPopupFields.BtnCoin.gameObject.SetActive(false);
-            //Debug.Log("isRewardAds_Avaiable"+ Advertisements.Instance.IsRewardVideoAvailable());
-            long currTimeLastTime = global::Rush.Chocology.Economy.Config.Runtime.SpinLastTime;
-            if (currTimeLastTime + global::Rush.Chocology.Economy.Config.TIME_SPIN < global::Rush.Chocology.Economy.Config.Runtime.TimeStamp)
-            {
-                m_SpinPopupFields.BtnWatchAds.Interactable = true;
-            }
-            else
-            {
-                m_SpinPopupFields.BtnWatchAds.Interactable = false;
-            }
-
             m_SpinPopupFields.BtnClose.gameObject.SetActive(false);
-            for (int i = 0; i < m_SpinPopupFields.ListItemsPos.Count; i++)
-            {
-                m_SpinPopupFields.ListItemsPos[i].gameObject.SetActive(false);
-            }
-
+            foreach (var slot in m_SpinPopupFields.ListItemsPos)
+                slot.gameObject.SetActive(false);
             InitListItemsInternal();
             InitViewShowViewInternal();
         }
@@ -254,125 +349,91 @@ namespace Rush.Chocology.Rewards
         public void InitListItems() => InitListItemsInternal();
         private void InitListItemsInternal()
         {
-            for (int i = 0; i < m_SpinPopupFields.ListItemsPos.Count; i++)
+            if (!WheelConfigurationValid)
             {
-                foreach (Transform child in m_SpinPopupFields.ListItemsPos[i])
-                {
+                Debug.LogError("Spin wheel requires matching slots, rewards, and non-negative weights.", this);
+                return;
+            }
+            foreach (var slot in m_SpinPopupFields.ListItemsPos)
+                foreach (Transform child in slot)
                     Destroy(child.gameObject);
-                }
-            }
-
-            List<global::Rush.Chocology.Economy.ConfigItemShopData> listSpinDatas_Temp = new List<global::Rush.Chocology.Economy.ConfigItemShopData>(m_SpinPopupFields.ListDatas);
+            var remaining = new List<global::Rush.Chocology.Economy.ConfigItemShopData>(m_SpinPopupFields.ListDatas);
             m_SpinPopupFields.ListSpinDatas.Clear();
-            for (int i = 0; i < m_SpinPopupFields.ListDatas.Count; i++)
+            while (remaining.Count > 0)
             {
-                int index = Random.Range(0, listSpinDatas_Temp.Count);
-                m_SpinPopupFields.ListSpinDatas.Add(listSpinDatas_Temp[index]);
-                listSpinDatas_Temp.RemoveAt(index);
+                int index = Random.Range(0, remaining.Count);
+                m_SpinPopupFields.ListSpinDatas.Add(remaining[index]);
+                remaining.RemoveAt(index);
             }
-
             for (int i = 0; i < m_SpinPopupFields.ListItemsPos.Count; i++)
             {
-                global::Rush.Chocology.Rewards.SpinItem spinItem = null;
-                if (m_SpinPopupFields.ListSpinDatas[i].ShopItemType == global::Rush.Chocology.Economy.Config.SHOPITEM.COIN)
+                var data = m_SpinPopupFields.ListSpinDatas[i];
+                SpinItem prefab = null;
+                switch (data.ShopItemType)
                 {
-                    spinItem = Instantiate(m_SpinPopupFields.SpinItemCoinPrefab, m_SpinPopupFields.ListItemsPos[i]);
+                    case global::Rush.Chocology.Economy.Config.SHOPITEM.COIN: prefab = m_SpinPopupFields.SpinItemCoinPrefab; break;
+                    case global::Rush.Chocology.Economy.Config.SHOPITEM.UNDO: prefab = m_SpinPopupFields.SpinItemUndoPrefab; break;
+                    case global::Rush.Chocology.Economy.Config.SHOPITEM.SUGGEST: prefab = m_SpinPopupFields.SpinItemSuggestPrefab; break;
+                    case global::Rush.Chocology.Economy.Config.SHOPITEM.SHUFFLE: prefab = m_SpinPopupFields.SpinItemShufflePrefab; break;
                 }
-                else if (m_SpinPopupFields.ListSpinDatas[i].ShopItemType == global::Rush.Chocology.Economy.Config.SHOPITEM.UNDO)
-                {
-                    spinItem = Instantiate(m_SpinPopupFields.SpinItemUndoPrefab, m_SpinPopupFields.ListItemsPos[i]);
-                }
-                else if (m_SpinPopupFields.ListSpinDatas[i].ShopItemType == global::Rush.Chocology.Economy.Config.SHOPITEM.SUGGEST)
-                {
-                    spinItem = Instantiate(m_SpinPopupFields.SpinItemSuggestPrefab, m_SpinPopupFields.ListItemsPos[i]);
-                }
-                else if (m_SpinPopupFields.ListSpinDatas[i].ShopItemType == global::Rush.Chocology.Economy.Config.SHOPITEM.SHUFFLE)
-                {
-                    spinItem = Instantiate(m_SpinPopupFields.SpinItemShufflePrefab, m_SpinPopupFields.ListItemsPos[i]);
-                }
-
-                spinItem.InitSpinItem(m_SpinPopupFields.ListSpinDatas[i]);
+                if (prefab != null)
+                    Instantiate(prefab, m_SpinPopupFields.ListItemsPos[i]).InitSpinItem(data);
             }
         }
 
         public void InitViewShowView() => InitViewShowViewInternal();
         private void InitViewShowViewInternal()
         {
-            Sequence sequenceShowView = DOTween.Sequence();
-            sequenceShowView.InsertCallback(0.1f, () =>
+            m_RevealSequence?.Kill();
+            var sequence = DOTween.Sequence().SetUpdate(true).SetLink(gameObject);
+            m_RevealSequence = sequence;
+            sequence.InsertCallback(c_PopupRevealDelay, () =>
+                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.Popup).ShowView());
+            for (int i = 0; i < m_SpinPopupFields.ListItemsPos.Count; i++)
             {
-                m_SpinPopupFields.Popup.gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.Popup).ShowView();
-            });
-            sequenceShowView.InsertCallback(0.5f, () =>
+                var slot = m_SpinPopupFields.ListItemsPos[i];
+                sequence.InsertCallback(c_FirstItemRevealDelay + i * c_ItemRevealInterval, () =>
+                {
+                    global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
+                    global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(slot).ShowView();
+                });
+            }
+            sequence.InsertCallback(c_FirstButtonRevealDelay, () =>
             {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[0].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[0]).ShowView();
+                m_ControlsReady = true;
+                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.BtnWatchAds).ShowView();
+                RefreshButtonsInternal();
             });
-            sequenceShowView.InsertCallback(0.6f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[1].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[1]).ShowView();
-            });
-            sequenceShowView.InsertCallback(0.7f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[2].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[2]).ShowView();
-            });
-            sequenceShowView.InsertCallback(0.8f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[3].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[3]).ShowView();
-            });
-            sequenceShowView.InsertCallback(0.9f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[4].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[4]).ShowView();
-            });
-            sequenceShowView.InsertCallback(1f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[5].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[5]).ShowView();
-            });
-            sequenceShowView.InsertCallback(1.1f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[6].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[6]).ShowView();
-            });
-            sequenceShowView.InsertCallback(1.2f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[7].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[7]).ShowView();
-            });
-            sequenceShowView.InsertCallback(1.3f, () =>
-            {
-                global::Rush.Chocology.Audio.SoundManager.Instance.PlaySoundWinStarPop();
-                m_SpinPopupFields.ListItemsPos[8].gameObject.SetActive(true);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.ListItemsPos[8]).ShowView();
-            });
-            sequenceShowView.InsertCallback(1.5f, () =>
-            {
-                m_SpinPopupFields.BtnWatchAds.gameObject.SetActive(false);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.BtnWatchAds.gameObject).ShowView();
-            });
-            sequenceShowView.InsertCallback(1.7f, () =>
-            {
-                m_SpinPopupFields.BtnCoin.gameObject.SetActive(false);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.BtnCoin.gameObject).ShowView();
-            });
-            sequenceShowView.InsertCallback(2f, () =>
-            {
-                m_SpinPopupFields.BtnClose.gameObject.SetActive(false);
-                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.BtnClose.gameObject).ShowView();
-            });
+            sequence.InsertCallback(c_FirstButtonRevealDelay + c_ButtonRevealInterval, () =>
+                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.BtnCoin).ShowView());
+            sequence.InsertCallback(c_CloseRevealDelay, () =>
+                global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_SpinPopupFields.BtnClose).ShowView());
         }
+
+        private void OnDisable()
+        {
+            m_RevealSequence?.Kill();
+            m_SpinTween?.Kill();
+            m_RevealSequence = null;
+            m_SpinTween = null;
+            // A forced panel/scene interruption must not charge an unfinished paid spin.
+            if (m_IsSpin && m_PaidSpinCost > 0 && global::Rush.Chocology.Economy.Config.Runtime != null)
+            {
+                var config = global::Rush.Chocology.Economy.Config.Runtime;
+                config.SetCoin(config.CurrCoin + m_PaidSpinCost);
+            }
+            m_PaidSpinCost = 0;
+            m_IsSpin = false;
+            m_AdPending = false;
+            m_IsClosing = false;
+            m_ControlsReady = false;
+        }
+
+        private void OnDestroy()
+        {
+            if (s_Instance == this)
+                s_Instance = null;
+        }
+
     }
 }

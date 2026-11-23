@@ -116,16 +116,16 @@ namespace Rush.Chocology.Gameplay
         //Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 #else
         if (Input.touchCount > 0) {
-            isCheckTouchCount = true;
+            m_IsCheckTouchCount = true;
         }
 
-        if (Input.touchCount == 0 && isCheckTouchCount) {
+        if (Input.touchCount == 0 && m_IsCheckTouchCount) {
             //Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            isCheckTouchCount = false;
-            if (bg.sortingLayerName.Equals("Hover"))
+            m_IsCheckTouchCount = false;
+            if (m_ItemTileFields.Bg.sortingLayerName.Equals("Hover"))
             {
-                SetLayer_Floor();
-                objGroup.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.Linear);
+                SetLayerFloorInternal();
+                m_ItemTileFields.ObjGroup.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.Linear);
             }
         }
 #endif
@@ -345,8 +345,8 @@ namespace Rush.Chocology.Gameplay
                 {
                     //isMouseDown = false;
                     //Debug.Log("OnMouseEnter" + gameObject.name);
-                    SetLayer_Hover();
-                    objGroup.transform.DOScale(Vector3.one * 1.1f, 0.1f).SetEase(Ease.Linear);
+                    SetLayerHoverInternal();
+                    m_ItemTileFields.ObjGroup.transform.DOScale(Vector3.one * 1.1f, 0.1f).SetEase(Ease.Linear);
                 }
 #endif
                 }

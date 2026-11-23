@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+  <androidPackages>
+    <repositories>
+      <repository>https://maven.google.com/</repository>
+    </repositories>
+    <!-- Google Play In-App Review, used by Rush.Chocology.Integrations.Review.InAppReviewRequest -->
+    <androidPackage spec="com.google.android.play:review:2.0.2" />
+  </androidPackages>
+</dependencies>

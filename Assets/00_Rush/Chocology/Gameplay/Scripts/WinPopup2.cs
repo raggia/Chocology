@@ -84,6 +84,8 @@ namespace Rush.Chocology.Gameplay
 
         [global::UnityEngine.SerializeField]
         private WinPopup2Field m_WinPopup2Fields = new WinPopup2Field();
+        [SerializeField]
+        private global::Rush.Chocology.Sharing.LevelClearShareView m_LevelClearShare;
         private static global::Rush.Chocology.Gameplay.WinPopup2 s_Instance;
         public static global::Rush.Chocology.Gameplay.WinPopup2 Instance { get => s_Instance; set => s_Instance = value; }
         public global::System.Collections.Generic.List<global::UnityEngine.GameObject> ListStars { get => m_WinPopup2Fields.ListStars; set => m_WinPopup2Fields.ListStars = value; }
@@ -147,6 +149,8 @@ namespace Rush.Chocology.Gameplay
         private void ShowWinPopupInternal(int _level, int _countStar, int _coinValue)
         {
             m_Level = _level;
+            if (m_LevelClearShare != null)
+                m_LevelClearShare.SetCompletedLevel(_level);
             m_CountStar = _countStar;
             if (m_CountStar == 3)
             {
@@ -185,6 +189,8 @@ namespace Rush.Chocology.Gameplay
         private void ShowViews()
         {
             gameObject.SetActive(true);
+            if (m_LevelClearShare != null)
+                m_LevelClearShare.gameObject.SetActive(false);
             m_WinPopup2Fields.LockGroup.SetActive(true);
             m_WinPopup2Fields.PopupReward.gameObject.SetActive(false);
             m_WinPopup2Fields.BtnClaim.gameObject.SetActive(false);
@@ -246,6 +252,8 @@ namespace Rush.Chocology.Gameplay
             yield return new WaitForSeconds(0.1f);
             m_WinPopup2Fields.BtnHome.gameObject.SetActive(true);
             global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIView>(m_WinPopup2Fields.BtnHome).ShowView();
+            if (m_LevelClearShare != null)
+                m_LevelClearShare.gameObject.SetActive(true);
         }
 
         private void InitSliderReward()

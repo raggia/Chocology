@@ -1,125 +1,131 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-#if UNITY_ANDROID
-using Unity.Notifications.Android;
-#endif
-using System;
+using Config = Rush.Chocology.Economy.Config;
 
 namespace Rush.Chocology.Rewards
 {
     [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "", "Assembly-CSharp", "SpinButtonManager")]
     public class SpinButtonManager : MonoBehaviour
     {
+        private const float c_RefreshInterval = 1f;
+        private const float c_PunchDuration = 1.5f;
+        private const int c_PunchVibrato = 5;
+        private const float c_PunchElasticity = 1f;
+        private const float c_PulseDelay = 2f;
+        private const float c_PulseScale = 1.1f;
+        private const float c_PulseDuration = 0.75f;
+        private const int c_PulseLoops = 2;
+        private static readonly Vector3 s_PunchPosition = new Vector3(5f, 5f, 0.1f);
+        private static readonly Vector3 s_PunchRotation = new Vector3(0f, 0f, 10f);
+        private static readonly Vector3 s_PunchScale = new Vector3(0.1f, 0.1f, 0.1f);
         private BBUIButton m_ButtonSpin;
         [UnityEngine.Serialization.FormerlySerializedAs("icon")]
-        [UnityEngine.SerializeField]
-        private Image m_Icon;
-        public global::UnityEngine.UI.Image Icon { get => m_Icon; set => m_Icon = value; }
-
+        [SerializeField] private Image m_Icon;
+        public Image Icon { get => m_Icon; set => m_Icon = value; }
         [UnityEngine.Serialization.FormerlySerializedAs("countDownTimeGroup")]
-        [UnityEngine.SerializeField]
-        private global::Rush.Chocology.Gameplay.CountDownTimeGroup m_CountDownTimeGroup;
+        [SerializeField] private global::Rush.Chocology.Gameplay.CountDownTimeGroup m_CountDownTimeGroup;
         public global::Rush.Chocology.Gameplay.CountDownTimeGroup CountDownTimeGroup { get => m_CountDownTimeGroup; set => m_CountDownTimeGroup = value; }
+        private Sequence m_SequenceSpinButton;
+        private Config m_Config;
+        private Vector3 m_IconPosition;
+        private Quaternion m_IconRotation;
+        private Vector3 m_IconScale;
+        private bool m_Started;
+        private float m_NextRefresh;
 
         private void Awake()
         {
-            m_ButtonSpin = global::Rush.Chocology.Core.RushComponentAccess.Resolve<global::BBUIButton>(this);
+            m_ButtonSpin = global::Rush.Chocology.Core.RushComponentAccess.Resolve<BBUIButton>(this);
+            m_IconPosition = m_Icon.transform.localPosition;
+            m_IconRotation = m_Icon.transform.localRotation;
+            m_IconScale = m_Icon.transform.localScale;
         }
 
-        // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-            m_CountDownTimeGroup.InitCallBack((global::Rush.Chocology.Economy.Config.COUNTDOWN_TIME_TYPE countDownTimeType) =>
-            {
-                CountDownTimeGroupCallBackInternal(countDownTimeType);
-            });
-            global::Rush.Chocology.Economy.Config.Runtime.OnChangeSpin_LastTime += OnChangeSpinLastTimeInternal;
+            m_Config = Config.Runtime;
+            m_CountDownTimeGroup.InitCallBack(CountDownTimeGroupCallBackInternal);
+            m_Config.OnChangeSpin_LastTime += OnChangeSpinLastTimeInternal;
+            m_Started = true;
             ShowSpinButtonInternal();
+        }
+
+        private void OnEnable()
+        {
+            if (m_Started)
+                ShowSpinButtonInternal();
+        }
+
+        private void Update()
+        {
+            if (m_Started && Time.unscaledTime >= m_NextRefresh)
+            {
+                m_NextRefresh = Time.unscaledTime + c_RefreshInterval;
+                ShowSpinButtonInternal();
+            }
+        }
+
+        private void OnDisable()
+        {
+            StopAnimationInternal();
+            m_CountDownTimeGroup.StopCountDownTime();
         }
 
         private void OnDestroy()
         {
-            global::Rush.Chocology.Economy.Config.Runtime.OnChangeSpin_LastTime -= OnChangeSpinLastTimeInternal;
+            if (m_Config != null)
+                m_Config.OnChangeSpin_LastTime -= OnChangeSpinLastTimeInternal;
         }
 
         public void OnChangeSpinLastTime() => OnChangeSpinLastTimeInternal();
-        private void OnChangeSpinLastTimeInternal()
-        {
-            ShowSpinButtonInternal();
-        }
-
+        private void OnChangeSpinLastTimeInternal() => ShowSpinButtonInternal();
         public void ShowSpinButton() => ShowSpinButtonInternal();
         private void ShowSpinButtonInternal()
         {
-            // long currTimeLastTime = Config.GetSpinLastTime();
-            // if (currTimeLastTime + Config.TIME_SPIN > Config.GetTimeStamp())
-            // {
-            //     buttonSpin.Interactable = false;
-            //     if (sequence_SpinButton != null)
-            //     {
-            //         sequence_SpinButton.Kill();
-            //     }
-            //     countDownTimeGroup.gameObject.SetActive(true);
-            //     countDownTimeGroup.InitCountDownTimeGroup(currTimeLastTime + Config.TIME_SPIN - Config.GetTimeStamp());
-            //     countDownTimeGroup.StartCountDownTime();
-            //     icon.color = new Color(200f/255f, 200f / 255f, 200f / 255f, 200f / 255f);
-            // }
-            // else
-            // {
-            //     
-            // }
-            m_Icon.color = new Color(1f, 1f, 1f, 1f);
-            m_CountDownTimeGroup.gameObject.SetActive(false);
+            if (!isActiveAndEnabled || m_Config == null)
+                return;
+            m_Icon.color = Color.white;
             m_ButtonSpin.Interactable = true;
-            long currTimeLastTime = global::Rush.Chocology.Economy.Config.Runtime.SpinLastTime;
-            if (currTimeLastTime + global::Rush.Chocology.Economy.Config.TIME_SPIN > global::Rush.Chocology.Economy.Config.Runtime.TimeStamp)
+            long remaining = m_Config.SpinCooldownRemaining;
+            m_CountDownTimeGroup.gameObject.SetActive(remaining > 0);
+            if (remaining > 0)
             {
-                if (m_SequenceSpinButton != null)
-                {
-                    m_SequenceSpinButton.Kill();
-                }
-
-                m_CountDownTimeGroup.gameObject.SetActive(true);
-                m_CountDownTimeGroup.InitCountDownTimeGroup(currTimeLastTime + global::Rush.Chocology.Economy.Config.TIME_SPIN - global::Rush.Chocology.Economy.Config.Runtime.TimeStamp);
+                StopAnimationInternal();
+                m_CountDownTimeGroup.InitCountDownTimeGroup(remaining);
                 m_CountDownTimeGroup.StartCountDownTime();
             }
             else
             {
-                ShowSpinButtonAvaiableInternal();
-                DateTime time = DateTime.FromBinary(currTimeLastTime + global::Rush.Chocology.Economy.Config.TIME_SPIN - global::Rush.Chocology.Economy.Config.Runtime.TimeStamp);
+                m_CountDownTimeGroup.StopCountDownTime();
+                if (m_SequenceSpinButton == null)
+                    ShowSpinButtonAvaiableInternal();
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        }
-
-        public void CountDownTimeGroupCallBack(global::Rush.Chocology.Economy.Config.COUNTDOWN_TIME_TYPE countDownTimeType) => CountDownTimeGroupCallBackInternal(countDownTimeType);
-        private void CountDownTimeGroupCallBackInternal(global::Rush.Chocology.Economy.Config.COUNTDOWN_TIME_TYPE countDownTimeType)
-        {
-            ShowSpinButtonInternal();
-        }
-
-        private Sequence m_SequenceSpinButton;
+        public void CountDownTimeGroupCallBack(Config.COUNTDOWN_TIME_TYPE type) => CountDownTimeGroupCallBackInternal(type);
+        private void CountDownTimeGroupCallBackInternal(Config.COUNTDOWN_TIME_TYPE type) => ShowSpinButtonInternal();
         public void ShowSpinButtonAvaiable() => ShowSpinButtonAvaiableInternal();
         private void ShowSpinButtonAvaiableInternal()
         {
-            //Debug.Log("ShowSpinButtonAvaiable");
-            if (m_SequenceSpinButton != null)
-            {
-                m_SequenceSpinButton.Kill();
-            }
-
-            m_SequenceSpinButton = DOTween.Sequence();
-            m_SequenceSpinButton.Insert(0f, m_Icon.transform.DOPunchPosition(new Vector3(5f, 5f, 0.1f), UnityEngine.Random.Range(1f, 2f), 5, 1).SetEase(Ease.InBounce));
-            m_SequenceSpinButton.Insert(0f, m_Icon.transform.DOPunchRotation(new Vector3(0f, 0f, 10f), UnityEngine.Random.Range(1f, 2f), 5, 1).SetEase(Ease.InOutBack));
-            m_SequenceSpinButton.Insert(0f, m_Icon.transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), UnityEngine.Random.Range(1f, 2f), 5, 1).SetEase(Ease.InBounce));
-            m_SequenceSpinButton.Insert(2f, m_Icon.transform.DOScale(1.1f, UnityEngine.Random.Range(0.5f, 1f)).SetEase(Ease.Linear).SetLoops(UnityEngine.Random.Range(2, 4), LoopType.Yoyo));
+            if (!isActiveAndEnabled)
+                return;
+            StopAnimationInternal();
+            m_SequenceSpinButton = DOTween.Sequence().SetUpdate(true).SetLink(gameObject);
+            m_SequenceSpinButton.Insert(0f, m_Icon.transform.DOPunchPosition(s_PunchPosition, c_PunchDuration, c_PunchVibrato, c_PunchElasticity).SetEase(Ease.InBounce));
+            m_SequenceSpinButton.Insert(0f, m_Icon.transform.DOPunchRotation(s_PunchRotation, c_PunchDuration, c_PunchVibrato, c_PunchElasticity).SetEase(Ease.InOutBack));
+            m_SequenceSpinButton.Insert(0f, m_Icon.transform.DOPunchScale(s_PunchScale, c_PunchDuration, c_PunchVibrato, c_PunchElasticity).SetEase(Ease.InBounce));
+            m_SequenceSpinButton.Insert(c_PulseDelay, m_Icon.transform.DOScale(m_IconScale * c_PulseScale, c_PulseDuration).SetEase(Ease.Linear).SetLoops(c_PulseLoops, LoopType.Yoyo));
             m_SequenceSpinButton.SetLoops(-1, LoopType.Yoyo);
+        }
+
+        private void StopAnimationInternal()
+        {
+            m_SequenceSpinButton?.Kill();
+            m_SequenceSpinButton = null;
+            m_Icon.transform.localPosition = m_IconPosition;
+            m_Icon.transform.localRotation = m_IconRotation;
+            m_Icon.transform.localScale = m_IconScale;
         }
     }
 }

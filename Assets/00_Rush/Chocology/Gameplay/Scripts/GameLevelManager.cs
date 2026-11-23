@@ -513,12 +513,15 @@ namespace Rush.Chocology.Gameplay
             return true;
         }
 
+        // An interstitial is shown after every N level clears.
+        private const int c_InterstitialWinInterval = 5;
+
         public void SetGameWin() => SetGameWinInternal();
         private void SetGameWinInternal()
         {
             global::Rush.Chocology.Economy.Config.Runtime.InterstitialAdCountWin++;
             Debug.Log("COUNT WIN = " + global::Rush.Chocology.Economy.Config.Runtime.InterstitialAdCountWin);
-            if (global::Rush.Chocology.Economy.Config.Runtime.InterstitialAdCountWin == 3)
+            if (global::Rush.Chocology.Economy.Config.Runtime.InterstitialAdCountWin >= c_InterstitialWinInterval)
             {
                 global::Rush.Chocology.Economy.Config.Runtime.InterstitialAdCountWin = 0;
                 BspLabsAdsMobile.Instance.ShowInterstitial();

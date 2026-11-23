@@ -150,13 +150,11 @@ namespace Rush.Chocology.Notifications
         /// </summary>
         /// <param name = "datetime"></param>
         /// <returns></returns>
-        static DateTime ParseDateTime(string datetime)
+        private static DateTime ParseDateTime(string datetime)
         {
-            //match 0000-00-00
-            string date = Regex.Match(datetime, @"^\d{4}-\d{2}-\d{2}").Value;
-            //match 00:00:00
-            string time = Regex.Match(datetime, @"\d{2}:\d{2}:\d{2}").Value;
-            return DateTime.Parse(string.Format("{0} {1}", date, time));
+            // Keep the API's UTC offset when the spin clock switches from its local fallback.
+            return DateTimeOffset.Parse(datetime, System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None).UtcDateTime;
         }
 
         public ServerTimeSnapshot ServerTime => new ServerTimeSnapshot(

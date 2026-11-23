@@ -76,11 +76,11 @@ namespace Rush.Chocology.Shop
             if (global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.Instance.IsInitialized())
             {
                 m_ItemShopIAPFields.TxtPrice.text = global::Rush.Chocology.Integrations.Purchasing.PurchaserManager.Instance.ReadLocalizedPriceString(m_ItemShopIAPFields.ConfigPackData.IdPack.ToString());
-                m_ItemShopIAPFields.BtnBuy.Interactable = true;
+                m_ItemShopIAPFields.BtnBuy.Interactable = m_ItemShopIAPFields.TxtPrice.text != "Unavailable";
             }
             else
             {
-                m_ItemShopIAPFields.TxtPrice.text = "0.01$";
+                m_ItemShopIAPFields.TxtPrice.text = "Unavailable";
                 m_ItemShopIAPFields.BtnBuy.Interactable = false;
             }
         }

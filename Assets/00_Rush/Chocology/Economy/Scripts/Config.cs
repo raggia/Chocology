@@ -273,25 +273,28 @@ namespace Rush.Chocology.Economy
         private int m_SpinPrice = 150;
         public int SpinPrice { get => m_SpinPrice; set => m_SpinPrice = value; }
 
-        public long TimeStamp
+        private static readonly DateTime s_SpinEpochUtc = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        public DateTime SpinTimeUtc
         {
             get
             {
-                Debug.Log(global::Rush.Chocology.Notifications.TimerFromServer.Instance.DateTimeNowOnServer.Subtract(new DateTime(2020, 1, 1)).TotalSeconds + " THIS UTC NOW : " + DateTime.UtcNow.Subtract(new DateTime(2020, 1, 1)).TotalSeconds);
-                return (long)(global::Rush.Chocology.Notifications.TimerFromServer.Instance.DateTimeNowOnServer.Subtract(new DateTime(2020, 1, 1))).TotalSeconds;
+                var timer = global::Rush.Chocology.Notifications.TimerFromServer.Instance;
+                if (timer != null && timer.ServerTime.IsReady && timer.ServerTime.Value >= s_SpinEpochUtc)
+                    return timer.ServerTime.Value.ToUniversalTime();
+                return DateTime.UtcNow;
             }
         }
 
-        public const int TIME_SPIN = 24 * 60 * 60; //1 * 60 * 60;
+        public long TimeStamp => Math.Max(0L, (long)(SpinTimeUtc - s_SpinEpochUtc).TotalSeconds);
+
+        public const int TIME_SPIN = 24 * 60 * 60;
         public const string SPIN_LASTTIME = "spin_lastTime";
-        public event Action OnChangeSpin_LastTime = delegate ()
-        {
-        };
+        public event Action OnChangeSpin_LastTime = delegate { };
         public void SetSpinLastTime() => SetSpinLastTimeInternal();
         private void SetSpinLastTimeInternal()
         {
-            long timeStamp = TimeStamp;
-            PlayerPrefs.SetString(SPIN_LASTTIME, timeStamp + "");
+            PlayerPrefs.SetString(SPIN_LASTTIME, TimeStamp.ToString(System.Globalization.CultureInfo.InvariantCulture));
             PlayerPrefs.Save();
             OnChangeSpin_LastTime();
         }
@@ -300,23 +303,28 @@ namespace Rush.Chocology.Economy
         {
             get
             {
-                string lastTime = PlayerPrefs.GetString(SPIN_LASTTIME, "0");
-                return long.Parse(lastTime);
+                long value;
+                return long.TryParse(PlayerPrefs.GetString(SPIN_LASTTIME, "0"), out value) && value > 0 ? value : 0;
+            }
+        }
+
+        public long SpinCooldownRemaining
+        {
+            get
+            {
+                long last = SpinLastTime;
+                if (last == 0)
+                    return 0;
+                long now = TimeStamp;
+                // Ignore impossible legacy dates; clamp small clock corrections to one cooldown.
+                if (last > now + TIME_SPIN)
+                    return 0;
+                return Math.Max(0L, Math.Min((long)TIME_SPIN, last + TIME_SPIN - now));
             }
         }
 
         public bool CheckSpinAvaiable() => CheckSpinAvaiableInternal();
-        private bool CheckSpinAvaiableInternal()
-        {
-            long currTimeLastTime = global::Rush.Chocology.Economy.Config.Runtime.SpinLastTime;
-            if (currTimeLastTime + global::Rush.Chocology.Economy.Config.TIME_SPIN < global::Rush.Chocology.Economy.Config.Runtime.TimeStamp)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
+        private bool CheckSpinAvaiableInternal() => SpinCooldownRemaining == 0;
 
         public enum COUNTDOWN_TIME_TYPE
         {

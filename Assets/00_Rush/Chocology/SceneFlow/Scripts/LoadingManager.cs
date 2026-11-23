@@ -27,6 +27,7 @@ namespace Rush.Chocology.SceneFlow
         [UnityEngine.SerializeField]
         private GameObject m_PanelLoading;
         private Coroutine m_RoutineOpenLoading;
+        private const float c_LoadingTimeoutSeconds = 30f;
         private void Awake()
         {
             SingletonSetup();
@@ -35,29 +36,35 @@ namespace Rush.Chocology.SceneFlow
         public void SpawnLoading() => SpawnLoadingInternal();
         private void SpawnLoadingInternal()
         {
-            Debug.Log("Spawn loading");
+            if (m_RoutineOpenLoading != null)
+                StopCoroutine(m_RoutineOpenLoading);
+            if (m_PanelLoading != null)
+                m_PanelLoading.SetActive(true);
             m_RoutineOpenLoading = StartCoroutine(CloseLoadingRoutine());
-            m_PanelLoading.SetActive(true);
         }
 
         public void CloseLoading() => CloseLoadingInternal();
         private void CloseLoadingInternal()
         {
-            Debug.Log("Close loading");
-            StopCoroutine(m_RoutineOpenLoading);
-            m_PanelLoading.SetActive(false);
+            if (m_RoutineOpenLoading != null)
+                StopCoroutine(m_RoutineOpenLoading);
+            m_RoutineOpenLoading = null;
+            if (m_PanelLoading != null)
+                m_PanelLoading.SetActive(false);
         }
 
         IEnumerator CloseLoadingRoutine()
         {
-            int i = 10;
-            while (i > 0)
-            {
-                i--;
-                yield return new WaitForSeconds(1f);
-            }
+            yield return new WaitForSecondsRealtime(c_LoadingTimeoutSeconds);
+            m_RoutineOpenLoading = null;
+            if (m_PanelLoading != null)
+                m_PanelLoading.SetActive(false);
+        }
 
-            m_PanelLoading.SetActive(false);
+        private void OnDestroy()
+        {
+            if (Instance == this)
+                Instance = null;
         }
     }
 }

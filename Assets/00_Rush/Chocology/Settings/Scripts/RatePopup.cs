@@ -104,12 +104,23 @@ namespace Rush.Chocology.Settings
         private void TouchLikeInternal()
         {
             global::Rush.Chocology.Economy.Config.Runtime.SetRate();
+            m_RatePopupFields.LockGroup.gameObject.SetActive(true);
+            StartCoroutine(RequestReviewAndClose());
+        }
+
+        private IEnumerator RequestReviewAndClose()
+        {
+            yield return new global::Rush.Chocology.Integrations.Review.InAppReviewRequest().Launch(OpenStoreReviewPage);
+            gameObject.SetActive(false);
+        }
+
+        private void OpenStoreReviewPage()
+        {
 #if UNITY_ANDROID
             Application.OpenURL(m_RateLinkAndorid);
 #else
-        Application.OpenURL(rateLinkIOS);
+            Application.OpenURL(m_RateLinkIOS);
 #endif
-            gameObject.SetActive(false);
         }
 
         private void PopupHideViewFinished()
